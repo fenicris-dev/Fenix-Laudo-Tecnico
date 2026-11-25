@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#041273">
+<meta name="application-name" content="Fênix | Laudos Técnicos">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icone/Fenix_Laudos_Icone_192.png">
+<link rel="apple-touch-icon" href="icone/Fenix_Laudos_Icone_192.png">
+<title>Fênix | Laudos Técnicos</title>
+<style>
+:root{--navy:#041273;--navy2:#0a2199;--gold:#c9a227;--gold2:#e8c35a;--bg:#f6f4ee;--card:#fff;--tile:#e8eefb;--ink:#14172b;--mut:#5b6075;--line:#e3e1d8;--ok:#0f7b3d;--okbg:#dff3e6;--warn:#8a5a00;--warnbg:#fff0cc;--bad:#b3261e;--badbg:#fde4e1;--info:#1d4fd8;--infobg:#e2eaff;--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;overscroll-behavior-y:none;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+#top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:var(--navy);color:#fff;border-bottom:3px solid var(--gold)}
+#top b{flex:1;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#back{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;width:38px;height:38px;font-size:20px;cursor:pointer}
+#main{max-width:980px;margin:0 auto;padding:14px 14px 100px}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.badge.ok{background:var(--okbg);color:var(--ok)}.badge.off,.badge.warn{background:var(--warnbg);color:var(--warn)}.badge.info{background:var(--infobg);color:var(--info)}.badge.mut{background:#ececf1;color:var(--mut)}.badge.bad{background:var(--badbg);color:var(--bad)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+h1{font-size:20px;margin:0;letter-spacing:.3px;color:var(--navy)}h2{font-size:17px;margin:18px 0 8px}h3{font-size:16px;margin:0}
+.mut{color:var(--mut)}small{color:var(--mut);display:block;font-size:12px;margin-top:3px}
+.row{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+@media(min-width:720px){.tiles{grid-template-columns:repeat(4,1fr)}}
+.tile{background:var(--tile);border:1px solid transparent;border-radius:14px;padding:14px;text-align:left;cursor:pointer;color:var(--ink);text-decoration:none;display:block;font:inherit}
+.tile:active{transform:scale(.98)}.tile:hover{border-color:var(--gold)}
+.tile svg{width:26px;height:26px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tile b{display:block;font-size:17px;margin-top:8px}.tile span{color:var(--mut);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{cursor:pointer;background:none;border:0;text-align:left;font:inherit;padding:0;color:var(--ink)}.stat b{display:block;font-size:32px;font-weight:700;line-height:1.1}.stat span{color:var(--mut);font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:12px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.pri{background:var(--navy);color:#fff}.btn.gold{background:var(--gold);border-color:var(--gold);color:#1a1400}.btn.danger{border-color:var(--bad);color:var(--bad)}.btn.danger.pri{background:var(--bad);color:#fff}
+.btn.sm{padding:6px 12px;font-size:14px;border-radius:10px}.btn:disabled{opacity:.45;cursor:not-allowed}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.grid2{display:grid;grid-template-columns:1fr;gap:10px}@media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+.f{display:block}.f.full,.full{grid-column:1/-1}.f>span,.lb{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid #cfd2dc;border-radius:10px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+input[type=checkbox]{width:auto}textarea{resize:vertical}
+input:disabled,select:disabled,textarea:disabled{background:#f1f1f4;color:#444}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:4px 0;font-weight:400}.chk input{margin-top:4px}
+.ov{position:fixed;inset:0;background:rgba(10,14,40,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center;overscroll-behavior:contain}
+@media(min-width:720px){.ov{align-items:center}}
+.md{background:#fff;width:100%;max-width:760px;max-height:92vh;display:flex;flex-direction:column;border-radius:20px 20px 0 0;overflow:hidden}
+@media(min-width:720px){.md{border-radius:20px}}.md.wide{max-width:900px}
+.mh{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fafaf7}.mh h3{flex:1}
+.mx{background:#eee;border:0;border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer}
+.mb{padding:16px;overflow:auto;overscroll-behavior:contain;flex:1}
+.mf{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#14172b;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:80;opacity:0;pointer-events:none;transition:.25s;max-width:90vw}#toast.on{opacity:1}
+.item{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.item .t{font-weight:700}.item .s{color:var(--mut);font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chip{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font:inherit;font-size:14px;cursor:pointer}.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.steps{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:6px}.stp{flex:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}.stp.on{background:var(--navy);color:#fff;border-color:var(--navy)}.stp.ok{border-color:var(--ok)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));z-index:15}.bar>div{max-width:980px;margin:0 auto;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.rc{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;background:#fcfcfa}.rc .grid2{gap:8px}
+.x{background:none;border:0;color:var(--bad);font-size:18px;cursor:pointer;padding:4px 8px}
+.alert{border-radius:12px;padding:10px 12px;margin:8px 0;font-size:14px}.alert.warn{background:var(--warnbg);color:#5c3b00}.alert.info{background:var(--infobg);color:#10337f}.alert.bad{background:var(--badbg);color:#7a1610}.alert.ok{background:var(--okbg);color:#0a4f27}
+.pend{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.th{border:1px solid var(--line);border-radius:12px;padding:6px;background:#fff}.th img{width:100%;height:110px;object-fit:cover;border-radius:8px}
+canvas.sg{width:100%;height:150px;border:1px dashed #9aa;border-radius:10px;background:#fff;touch-action:none}
+.imgp{max-width:100%;max-height:90px;border:1px solid var(--line);border-radius:8px;padding:4px;background:#fff;display:block;margin:6px 0}
+.lock .ed{display:none!important}
+pre.pm{white-space:pre-wrap;font:12.5px/1.45 ui-monospace,Consolas,monospace;background:#f4f4f1;padding:10px;border-radius:10px;max-height:50vh;overflow:auto}
+/* ===== documento ===== */
+.doc{background:#fff;color:#111;font:10.5pt/1.45 "Segoe UI",Arial,sans-serif;max-width:210mm;margin:0 auto;padding:12mm;position:relative}
+.doc .dh{display:flex;gap:14px;align-items:center;border-bottom:3px solid var(--navy);padding-bottom:10px;margin-bottom:12px}
+.doc .dh img{max-height:64px;max-width:150px;object-fit:contain}
+.doc .dh .e{flex:1}.doc .dh .e b{font-size:13pt;color:var(--navy)}.doc .dh .e div{font-size:9pt;color:#444}
+.doc .dn{text-align:right;font-size:9pt}.doc .dn b{display:block;font-size:12pt;color:var(--navy)}
+.doc h1{font-size:15pt;text-align:center;color:var(--navy);margin:8px 0 2px;text-transform:uppercase}
+.doc .sub{text-align:center;font-size:9.5pt;color:#555;margin-bottom:10px}
+.doc h2{font-size:10.5pt;color:#fff;background:var(--navy);padding:4px 8px;margin:14px 0 6px;border-radius:3px;break-after:avoid;text-transform:uppercase;letter-spacing:.3px}
+.doc table{width:100%;border-collapse:collapse;margin:4px 0 8px;font-size:9.5pt}
+.doc th,.doc td{border:1px solid #c9ccd6;padding:4px 6px;text-align:left;vertical-align:top}
+.doc th{background:#eef1fa;font-weight:600}.doc table.kv th{width:32%}.doc tr{break-inside:avoid}
+.doc .nd{color:#888;font-style:italic}
+.doc .box{border:2px solid var(--gold);background:#fffbea;padding:8px 10px;border-radius:4px;margin:6px 0;break-inside:avoid}
+.doc .note{font-size:9pt;color:#444;border-left:3px solid var(--gold);padding:3px 8px;margin:6px 0;background:#fafaf5}
+.doc .figs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.doc figure{margin:0;break-inside:avoid;border:1px solid #ddd;padding:4px}.doc figure img{width:100%;max-height:70mm;object-fit:contain}.doc figcaption{font-size:8.5pt;color:#444;text-align:center}
+.doc .sig{margin-top:22px;text-align:center;break-inside:avoid}.doc .sig img{max-height:60px}.doc .sig .ln{border-top:1px solid #000;width:280px;margin:2px auto 0;padding-top:3px}
+.doc ul{margin:4px 0 6px 18px;padding:0}
+.doc .wm{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:30pt;font-weight:800;color:rgba(179,38,30,.13);transform:rotate(-24deg);pointer-events:none;line-height:1.1}
+.doc .rasc{background:#fde4e1;color:#7a1610;text-align:center;font-weight:700;padding:4px;margin-bottom:8px;border-radius:4px;font-size:9.5pt}
+.pf-head,.pf-foot{display:none}
+#print-root{display:none}
+@media print{
+ html,body{background:#fff}
+ body>*:not(#print-root){display:none!important}
+ #print-root{display:block!important}
+ @page{size:A4;margin:22mm 14mm 20mm;@bottom-right{content:"Página " counter(page) " de " counter(pages);font:8pt Arial;color:#555}}
+ .doc{max-width:none;padding:0}
+ .pf-head{display:block;position:fixed;top:-16mm;left:0;right:0;font-size:8pt;color:#555;border-bottom:1px solid #bbb;padding-bottom:2px}
+ .pf-foot{display:block;position:fixed;bottom:-16mm;left:0;font-size:7.5pt;color:#555}
+ .doc .wm{position:fixed;top:42%}
+ .doc h2{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ .doc th,.doc .box,.doc .rasc{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header id="top"><button id="back" aria-label="Voltar" style="display:none">←</button><b id="ttl">Fênix | Laudos Técnicos</b><span id="net" class="badge ok">Online</span></header>
+<main id="main"></main>
+<div id="modais"></div><div id="print-root"></div><div id="toast" role="status"></div>
+<script>
+'use strict';
+const VERSAO='1.0',APP='Fênix | Laudos Técnicos';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nl=s=>esc(s).replace(/\n/g,'<br>');
+const uid=()=>(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,10));
+const agora=()=>new Date().toISOString();
+const hoje=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fmtData=i=>{if(!i)return'—';const d=/^\d{4}-\d{2}-\d{2}$/.test(i)?new Date(i+'T12:00:00'):new Date(i);return isNaN(d)?'—':d.toLocaleDateString('pt-BR')};
+const fmtDH=i=>{if(!i)return'—';const d=new Date(i);return isNaN(d)?'—':d.toLocaleString('pt-BR')};
+const alfa=(a,b)=>String(a||'').localeCompare(String(b||''),'pt-BR',{sensitivity:'base'});
+const clone=o=>JSON.parse(JSON.stringify(o));
+const linhas=t=>String(t||'').split('\n').map(s=>s.trim()).filter(Boolean);
+const slug=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,30);
+const getP=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+function setP(o,p,v){const ks=p.split('.');let a=o;ks.slice(0,-1).forEach((k,i)=>{if(a[k]==null)a[k]=/^\d+$/.test(ks[i+1])?[]:{};a=a[k]});a[ks[ks.length-1]]=v}
+const soNum=s=>String(s||'').replace(/\D/g,'');
+function validarCNPJ(c){c=soNum(c);if(c.length!==14||/^(\d)\1+$/.test(c))return false;const f=n=>{let s=0,p=n-7;for(let i=0;i<n;i++){s+=+c[i]*p--;if(p<2)p=9}const r=s%11;return r<2?0:11-r};return f(12)===+c[12]&&f(13)===+c[13]}
+function validarCPF(c){c=soNum(c);if(c.length!==11||/^(\d)\1+$/.test(c))return false;const f=n=>{let s=0;for(let i=0;i<n;i++)s+=+c[i]*(n+1-i);const r=(s*10)%11;return r===10?0:r};return f(9)===+c[9]&&f(10)===+c[10]}
+function fmtDoc(d){d=soNum(d);if(d.length===11)return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');if(d.length===14)return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');return d}
+const endStr=o=>[[o.logradouro,o.numero].filter(Boolean).join(', '),o.bairro,[o.cidade,o.uf].filter(Boolean).join('/'),o.cep?'CEP '+o.cep:''].filter(Boolean).join(' - ');
+
+/* ===== dados fixos ===== */
+const FINALIDADES=['Avaliação das condições de funcionamento','Diagnóstico de falha elétrica','Verificação de segurança elétrica','Avaliação de danos após descarga elétrica','Inspeção de equipamento usado','Verificação de conformidade com requisitos técnicos','Análise das condições para reutilização','Avaliação de equipamento após manutenção'];
+const CLASSES=[['','Selecione…'],['apto','Apto para operação'],['restricoes','Apto com restrições'],['inapto','Inapto para operação'],['manutencao','Necessita de manutenção'],['nova','Necessita de nova avaliação'],['inconclusivo','Não foi possível concluir']];
+const classeTxt=v=>(CLASSES.find(c=>c[0]===v)||[,''])[1];
+const ST={rascunho:['Rascunho','warn'],revisao:['Em revisão','info'],definitivo:['Definitivo','ok'],arquivado:['Arquivado','mut']};
+const AVAL=[['','—'],['conforme','Conforme'],['nao','Não conforme'],['sem','Sem critério (só registro)']];
+const FONTES=['','Especificação do fabricante','Norma técnica','Critério técnico justificado'];
+const REFS=[['nbr10719','ABNT NBR 10719 — Apresentação de relatórios técnicos e científicos'],['nr10','NR-10 — Segurança em instalações e serviços em eletricidade'],['nbr5410','ABNT NBR 5410 — Instalações elétricas de baixa tensão'],['nbr14039','ABNT NBR 14039 — Instalações elétricas de média tensão'],['cft055','Resolução CFT nº 055/2019'],['confea1137','Resolução CONFEA nº 1.137/2023 — ART e acervo técnico'],['trtman','Manual de geração de TRT — CFT']];
+const refTxt=id=>(REFS.find(r=>r[0]===id)||[,id])[1];
+const CATS=[
+{id:'motores',nome:'Motores elétricos',desc:'Placa, potência, tensão, corrente, isolamento, funcionamento e condições mecânicas.',campos:[['rpm','Rotação nominal (rpm)'],['corrente','Corrente nominal (A)'],['fp','Fator de potência'],['ip','Grau de proteção (IP)'],['isolamento','Classe de isolamento'],['fases','Nº de fases / ligação'],['carcaca','Carcaça']],proc:['Inspeção visual da carcaça, tampas e caixa de ligação','Verificação de fixação e alinhamento','Verificação de rolamentos e giro livre do eixo (folga, ruído)','Inspeção de terminais e conexões','Medição de resistência ôhmica dos enrolamentos','Medição de resistência de isolamento','Medição de tensão de alimentação','Medição de corrente em operação','Teste funcional (partida e operação)','Verificação de aterramento, quando aplicável'],med:[['Tensão de alimentação','V'],['Corrente em operação','A'],['Resistência ôhmica dos enrolamentos','Ω'],['Resistência de isolamento','MΩ'],['Rotação','rpm'],['Temperatura da carcaça','°C']],refs:['nr10','nbr5410']},
+{id:'quadros',nome:'Quadros elétricos',desc:'Disjuntores, barramentos, conexões, dimensionamento, identificação e proteção.',campos:[['tensaoBarr','Tensão do barramento (V)'],['corrBarr','Corrente nominal do barramento (A)'],['ipq','Grau de proteção (IP)'],['ncirc','Nº de circuitos'],['dps','Possui DPS? (sim/não)'],['dr','Possui DR? (sim/não)']],proc:['Inspeção visual geral (corrosão, aquecimento, sujidade)','Verificação de identificação de circuitos e diagrama','Inspeção de disjuntores e dispositivos de proteção','Verificação de barramentos e conexões (aperto, descoloração)','Verificação de dimensionamento de condutores e proteções','Medição de tensão (fase-fase / fase-neutro)','Medição de corrente por circuito','Verificação de aterramento e equipotencialização','Teste de dispositivo DR, quando existente','Termografia, quando disponível'],med:[['Tensão fase-neutro','V'],['Tensão fase-fase','V'],['Corrente por circuito','A'],['Resistência de aterramento','Ω'],['Corrente de fuga','mA'],['Temperatura de conexões','°C']],refs:['nr10','nbr5410']},
+{id:'eletronicos',nome:'Equipamentos eletrônicos',desc:'Fontes, placas, componentes, circuitos, alimentação e diagnóstico.',campos:[['tipoAlim','Tipo de alimentação (CA/CC/bateria)'],['fonte','Fonte / saída nominal'],['placa','Referência da placa'],['firmware','Firmware / versão']],proc:['Inspeção visual externa e interna','Inspeção da placa (soldas, trilhas, componentes dilatados ou queimados)','Verificação de fusíveis e proteções','Medição das tensões de alimentação e de saída da fonte','Medição de continuidade','Análise de componentes (em circuito / fora do circuito)','Teste funcional','Verificação de aquecimento anormal'],med:[['Tensão de entrada','V'],['Tensão de saída da fonte','V'],['Corrente de consumo','A'],['Continuidade',''],['Temperatura de componentes','°C']],refs:['nr10']},
+{id:'eletrodomesticos',nome:'Eletrodomésticos e climatização',desc:'Identificação, alimentação, componentes, funcionamento e condições de segurança.',campos:[['capac','Capacidade (BTU / L / kg)'],['corrNom','Corrente nominal (A)'],['fluido','Fluido refrigerante (se aplicável)'],['selo','Classe de eficiência / selo']],proc:['Inspeção visual externa e interna','Inspeção do cabo de alimentação e do plugue','Verificação da tomada e da alimentação','Teste de acionamento','Teste funcional','Medição de tensão','Medição de corrente em operação','Verificação de aterramento e de corrente de fuga','Avaliação do circuito interno (somente por profissional capacitado, com procedimento seguro)','Verificação das condições de segurança'],med:[['Tensão na tomada','V'],['Tensão no equipamento','V'],['Corrente em operação','A'],['Potência','W'],['Continuidade do cabo',''],['Resistência de isolamento','MΩ'],['Temperatura','°C']],refs:['nr10']},
+{id:'geradores',nome:'Geradores e fontes de energia',desc:'Potência, tensão, frequência, corrente, proteção e testes operacionais.',campos:[['comb','Combustível / tipo da fonte'],['kva','Potência (kVA)'],['fpg','Fator de potência'],['fasesG','Fases'],['horas','Horímetro (h)'],['transf','Tipo de partida / transferência']],proc:['Inspeção visual geral','Verificação do sistema de partida e de transferência (quando existente)','Verificação de proteções','Medição de tensão em vazio','Medição de tensão e frequência em carga','Medição de corrente por fase','Verificação de aterramento','Teste operacional sob carga','Verificação de ruído, vibração e aquecimento'],med:[['Tensão em vazio','V'],['Tensão em carga','V'],['Frequência','Hz'],['Corrente por fase','A'],['Potência ativa','kW'],['Temperatura','°C']],refs:['nr10','nbr5410']},
+{id:'transformadores',nome:'Transformadores',desc:'Características nominais, conexões, isolamento, medições e condições operacionais.',campos:[['kvat','Potência (kVA)'],['tPri','Tensão primária (V)'],['tSec','Tensão secundária (V)'],['ligacao','Grupo de ligação'],['refrig','Resfriamento (seco / óleo)'],['imped','Impedância (%)']],proc:['Inspeção visual (carcaça, buchas, vazamentos)','Verificação de terminais e conexões','Verificação do nível e da condição do óleo, quando aplicável','Medição de resistência de isolamento','Medição de resistência ôhmica dos enrolamentos','Medição de relação de transformação, quando disponível','Medição de tensões e correntes em operação','Verificação de aterramento','Verificação de temperatura'],med:[['Resistência de isolamento','MΩ'],['Resistência ôhmica','Ω'],['Relação de transformação',''],['Tensão primária','V'],['Tensão secundária','V'],['Temperatura','°C']],refs:['nr10','nbr14039','nbr5410']},
+{id:'seguranca',nome:'Sistemas de segurança eletrônica',desc:'CFTV, DVR, NVR, alarmes, fontes, cabeamento, alimentação e funcionamento.',campos:[['qtd','Quantidade de câmeras / sensores'],['gravador','Gravador (DVR/NVR) — modelo'],['hd','Armazenamento (TB)'],['fonteAl','Fonte de alimentação (V / A)'],['cabo','Tipo de cabeamento']],proc:['Inspeção visual de câmeras, sensores e gravador','Verificação de fontes e alimentação (V e A)','Verificação de cabeamento e conectores','Teste de imagem e gravação','Verificação de rede (IP, PoE), quando aplicável','Verificação de disco / armazenamento','Teste de alarmes e sirenes','Verificação de bateria e nobreak, quando existente'],med:[['Tensão da fonte','V'],['Corrente de consumo','A'],['Tensão no ponto (câmera)','V'],['Continuidade do cabo','']],refs:['nr10']},
+{id:'veiculos',nome:'Carregadores de veículos elétricos',desc:'Alimentação, proteções, conexões, comunicação, potência e funcionamento.',campos:[['potC','Potência (kW)'],['conector','Modo / tipo de conector'],['fasesC','Monofásico / trifásico'],['prot','Proteções integradas (DR/DPS)'],['comunic','Comunicação (OCPP / Wi-Fi)']],proc:['Inspeção visual do carregador, cabo e conector','Verificação da alimentação e do circuito dedicado','Verificação de proteções (disjuntor, DR, DPS)','Verificação de aterramento','Medição de tensão de alimentação','Teste de comunicação com o veículo / rede','Teste de carga (operação)','Verificação de aquecimento de conexões'],med:[['Tensão de alimentação','V'],['Corrente de carga','A'],['Resistência de aterramento','Ω'],['Corrente de fuga','mA'],['Temperatura de conexões','°C']],refs:['nr10','nbr5410']},
+{id:'outros',nome:'Outros equipamentos',desc:'Modelo genérico; crie um modelo personalizado para campos e procedimentos próprios.',campos:[],proc:['Inspeção visual','Verificação da alimentação','Teste funcional'],med:[['Tensão','V'],['Corrente','A']],refs:['nr10']}
+];
+function allCats(){const cu=S.modelos.map(m=>({id:m.id,custom:true,nome:m.nome,desc:m.desc||'',campos:linhas(m.camposTxt).map(l=>[slug(l),l]),proc:linhas(m.procTxt),med:linhas(m.medTxt).map(l=>{const[a,b]=l.split('|').map(s=>s.trim());return[a,b||'']}),refs:[]}));return[...CATS,...cu].sort((a,b)=>alfa(a.nome,b.nome))}
+const catPor=id=>allCats().find(c=>c.id===id)||null;
+
+/* ===== armazenamento local (IndexedDB) ===== */
+const COLS=['empresa','profissionais','clientes','laudos','modelos','catalogo','instrumentos'];
+const S={};COLS.forEach(c=>S[c]=[]);
+let idb=null,idbOk=false;
+function abrirDB(){return new Promise(res=>{try{const r=indexedDB.open('fenix_laudos',1);r.onupgradeneeded=()=>{COLS.forEach(c=>{if(!r.result.objectStoreNames.contains(c))r.result.createObjectStore(c,{keyPath:'id'})})};r.onsuccess=()=>{idb=r.result;idbOk=true;res()};r.onerror=()=>res();r.onblocked=()=>res()}catch(e){res()}})}
+const tx=(c,m)=>idb.transaction(c,m).objectStore(c);
+function carregar(){return Promise.all(COLS.map(c=>new Promise(res=>{if(!idbOk)return res();try{const q=tx(c,'readonly').getAll();q.onsuccess=()=>{S[c]=q.result||[];res()};q.onerror=()=>res()}catch(e){res()}})))}
+function salvar(c,o){o.atualizadoEm=agora();o.sync=false;const i=S[c].findIndex(x=>x.id===o.id);if(i>=0)S[c][i]=o;else S[c].push(o);if(idbOk){try{tx(c,'readwrite').put(o)}catch(e){console.warn(e)}}return o}
+function remover(c,id){S[c]=S[c].filter(x=>x.id!==id);if(idbOk){try{tx(c,'readwrite').delete(id)}catch(e){}}}
+function limparTudo(){return Promise.all(COLS.map(c=>new Promise(res=>{S[c]=[];if(!idbOk)return res();try{const q=tx(c,'readwrite').clear();q.onsuccess=q.onerror=()=>res()}catch(e){res()}})))}
+const emp=()=>S.empresa[0]||{id:'empresa'};
+
+/* ===== interface base ===== */
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2600)}
+function modal(titulo,corpo,{acoes=[],largo=false,onClose,onOpen}={}){
+ const ov=document.createElement('div');ov.className='ov';
+ ov.innerHTML=`<div class="md${largo?' wide':''}" role="dialog" aria-modal="true"><div class="mh"><h3>${esc(titulo)}</h3><button class="mx" aria-label="Fechar">✕</button></div><div class="mb">${corpo}</div>${acoes.length?'<div class="mf"></div>':''}</div>`;
+ $('#modais').appendChild(ov);
+ const api={el:ov,close(r){ov.remove();onClose&&onClose(r)}};
+ $('.mx',ov).onclick=()=>api.close(false);
+ const mf=$('.mf',ov);
+ acoes.forEach(a=>{const b=document.createElement('button');b.className='btn '+(a.cls||'');b.textContent=a.t;b.onclick=async()=>{const r=a.fn?await a.fn(api):undefined;if(r!==false&&!a.keep)api.close(a.ret??true)};mf.appendChild(b)});
+ onOpen&&onOpen(api);return api}
+function confirmar(msg,{ok='Excluir',perigo=true}={}){return new Promise(res=>{let r=false;modal('Confirmação',`<p>${esc(msg)}</p>`,{acoes:[{t:'Cancelar',fn:()=>{r=false}},{t:ok,cls:'pri'+(perigo?' danger':''),fn:()=>{r=true}}],onClose:()=>res(r)})})}
+function confirmarApagar(){return new Promise(res=>{let r=false;modal('Apagar todos os dados',`<div class="alert bad">Isto apaga empresa, profissionais, contratantes, laudos (inclusive definitivos), modelos e catálogo <b>deste aparelho</b>. Não há como desfazer. Faça um backup antes (Sincronização).</div><label class="f"><span>Digite APAGAR para confirmar</span><input id="apg" autocomplete="off"></label>`,{acoes:[{t:'Cancelar'},{t:'Apagar tudo',cls:'pri danger',fn:()=>{if($('#apg').value.trim()!=='APAGAR'){toast('Digite APAGAR exatamente');return false}r=true}}],onClose:()=>res(r)})})}
+
+/* ===== formulário genérico em modal ===== */
+function campoHTML(c,v){
+ const val=v[c.k]??'';let inp='';const full=c.w?' full':'';
+ if(c.t==='textarea')inp=`<textarea data-k="${c.k}" rows="${c.rows||3}" placeholder="${esc(c.ph||'')}">${esc(val)}</textarea>`;
+ else if(c.t==='select')inp=`<select data-k="${c.k}">${c.o.map(([a,b])=>`<option value="${esc(a)}"${a===val?' selected':''}>${esc(b)}</option>`).join('')}</select>`;
+ else if(c.t==='cats')return `<div class="f full"><span class="lb">${esc(c.l)}</span>${allCats().map(k=>`<label class="chk"><input type="checkbox" data-cat="${k.id}"${(v[c.k]||[]).includes(k.id)?' checked':''}> ${esc(k.nome)}</label>`).join('')}${c.hint?`<small>${esc(c.hint)}</small>`:''}</div>`;
+ else if(c.t==='img')return `<div class="f${full}"><span class="lb">${esc(c.l)}</span><div data-img="${c.k}">${val?`<img class="imgp" src="${val}" alt="">`:''}</div><input type="file" accept="image/*" data-file="${c.k}">${val?`<button class="btn sm danger" type="button" data-rmimg="${c.k}" style="margin-top:6px">Remover imagem</button>`:''}</div>`;
+ else if(c.t==='sign')return `<div class="f full"><span class="lb">${esc(c.l)}</span><div data-img="${c.k}">${val?`<img class="imgp" src="${val}" alt="">`:'<small>Nenhuma assinatura cadastrada</small>'}</div><canvas class="sg" data-sg="${c.k}"></canvas><div class="acts"><button class="btn sm" type="button" data-sgclr="${c.k}">Limpar quadro</button><button class="btn sm" type="button" data-sgset="${c.k}">Usar o que desenhei</button><input type="file" accept="image/*" data-file="${c.k}" style="max-width:260px"></div><small>Desenhe com o dedo/mouse e toque em "Usar o que desenhei", ou envie uma imagem da assinatura. Assinatura visual não é assinatura digital certificada.</small></div>`;
+ else if(c.t==='cnpj')return `<label class="f${full}"><span>${esc(c.l)}</span><div style="display:flex;gap:8px"><input data-k="${c.k}" value="${esc(val)}" inputmode="numeric" placeholder="${esc(c.ph||'')}"><button class="btn sm" type="button" data-buscacnpj>Buscar CNPJ</button></div>${c.hint?`<small>${esc(c.hint)}</small>`:''}</label>`;
+ else inp=`<input data-k="${c.k}" type="${c.t||'text'}" value="${esc(val)}" placeholder="${esc(c.ph||'')}"${c.list?` list="${c.list}"`:''}>`;
+ return `<label class="f${full}"><span>${esc(c.l)}</span>${inp}${c.hint?`<small>${esc(c.hint)}</small>`:''}</label>`}
+async function buscarCNPJ(c){const r=await fetch('https://brasilapi.com.br/api/cnpj/v1/'+soNum(c));if(!r.ok)throw new Error('CNPJ não encontrado ('+r.status+')');return r.json()}
+function formModal(titulo,campos,val,onSave){
+ const v=clone(val||{});
+ const m=modal(titulo,`<div class="grid2">${campos.map(c=>campoHTML(c,v)).join('')}</div>`,{largo:true,acoes:[{t:'Cancelar'},{t:'Salvar',cls:'pri',fn:async api=>{
+  const out={...v};
+  $$('[data-k]',api.el).forEach(x=>out[x.dataset.k]=x.value.trim());
+  const cs=campos.find(c=>c.t==='cats');if(cs)out[cs.k]=$$('[data-cat]',api.el).filter(x=>x.checked).map(x=>x.dataset.cat);
+  const msg=await onSave(out);if(msg){toast(msg);return false}}}],
+  onOpen:api=>{
+   const el=api.el;
+   el.addEventListener('change',async e=>{const f=e.target.dataset.file;if(f&&e.target.files[0]){try{v[f]=await lerImagem(e.target.files[0],f==='assinatura'?500:600,.9,true);$(`[data-img=${f}]`,el).innerHTML=`<img class="imgp" src="${v[f]}" alt="">`}catch(x){toast('Imagem inválida')}}});
+   el.addEventListener('click',async e=>{
+    const t=e.target;
+    if(t.dataset.rmimg&&await confirmar('Tem certeza que quer remover esta imagem?',{ok:'Remover'})){v[t.dataset.rmimg]='';$(`[data-img=${t.dataset.rmimg}]`,el).innerHTML='';t.remove()}
+    if(t.dataset.sgclr){const cv=$(`[data-sg=${t.dataset.sgclr}]`,el);cv.getContext('2d').clearRect(0,0,cv.width,cv.height);cv._d=0}
+    if(t.dataset.sgset){const cv=$(`[data-sg=${t.dataset.sgset}]`,el);if(!cv._d){toast('Desenhe a assinatura primeiro');return}v[t.dataset.sgset]=cv.toDataURL('image/png');$(`[data-img=${t.dataset.sgset}]`,el).innerHTML=`<img class="imgp" src="${v[t.dataset.sgset]}" alt="">`;toast('Assinatura definida — toque em Salvar')}
+    if(t.dataset.buscacnpj!==undefined){const inp=$('[data-k=cnpj],[data-k=doc]',el);const n=soNum(inp.value);if(!validarCNPJ(n)){toast('CNPJ inválido');return}
+     t.disabled=true;t.textContent='Buscando…';
+     try{const j=await buscarCNPJ(n);const S1=(ks,x)=>{for(const k of ks){const i=$(`[data-k=${k}]`,el);if(i&&x){i.value=x;return}}};
+      S1(['razao','nome'],j.razao_social);S1(['fantasia'],j.nome_fantasia);S1(['logradouro'],[j.descricao_tipo_de_logradouro,j.logradouro].filter(Boolean).join(' '));S1(['numero'],j.numero);S1(['bairro'],j.bairro);S1(['cidade'],j.municipio);S1(['uf'],j.uf);S1(['cep'],j.cep);S1(['telefone'],j.ddd_telefone_1);S1(['email'],j.email);toast('Dados preenchidos pela Receita (BrasilAPI)')}
+     catch(x){toast(navigator.onLine?x.message:'Sem internet: preencha manualmente')}
+     t.disabled=false;t.textContent='Buscar CNPJ'}});
+   $$('canvas.sg',el).forEach(cv=>{const r=cv.getBoundingClientRect();cv.width=Math.max(300,r.width*2);cv.height=300;const x=cv.getContext('2d');x.lineWidth=4;x.lineCap='round';x.strokeStyle='#111';let d=false;
+    const pt=e=>{const b=cv.getBoundingClientRect();return[(e.clientX-b.left)*cv.width/b.width,(e.clientY-b.top)*cv.height/b.height]};
+    cv.onpointerdown=e=>{d=true;cv.setPointerCapture(e.pointerId);const[a,b]=pt(e);x.beginPath();x.moveTo(a,b)};
+    cv.onpointermove=e=>{if(!d)return;const[a,b]=pt(e);x.lineTo(a,b);x.stroke();cv._d=1};
+    cv.onpointerup=cv.onpointercancel=()=>d=false})}});
+ return m}
+function lerImagem(file,max=1280,q=.78,png=false){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');if(!png){x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}x.drawImage(im,0,0,c.width,c.height);res(c.toDataURL(png?'image/png':'image/jpeg',q))};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+/* ===== ícones e navegação ===== */
+const IC={novo:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/>',laudos:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',empresa:'<path d="M4 21V5l7-2v18M11 21h9V9l-9-1M7 9h1M7 13h1M7 17h1M15 12h1M15 16h1"/>',prof:'<path d="M3 18h18M5 18a7 7 0 0 1 14 0M12 6v5M9 8l1 3M15 8l-1 3"/>',cli:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',eq:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',mod:'<path d="M2 5.5C4 4 8 4 12 6c4-2 8-2 10-.5V19c-2-1.5-6-1.5-10 .5-4-2-8-2-10-.5z"/><path d="M12 6v13.5"/>',sync:'<path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 9a4 4 0 0 1-.5 9z"/>'};
+const svg=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
+const UFS=['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+const ufSel=[['','UF'],...UFS.map(u=>[u,u])];
+const main=(h,titulo,back)=>{$('#main').innerHTML=h;$('#ttl').textContent=titulo||APP;const b=$('#back');b.style.display=back?'':'none';b.onclick=()=>{location.hash=back};window.scrollTo(0,0)};
+const go=h=>{location.hash=h};
+function ultimas(){const m={};S.laudos.forEach(l=>{if(!m[l.grupoId]||m[l.grupoId].versao<l.versao)m[l.grupoId]=l});return Object.values(m)}
+const badge=s=>`<span class="badge ${ST[s][1]}">${ST[s][0]}</span>`;
+const nomeCli=l=>(S.clientes.find(c=>c.id===l.dados.clienteId)||l.snap?.contratante||{}).nome||'(sem contratante)';
+const eqTxt=l=>[l.dados.equip?.equipamento,l.dados.equip?.fabricante,l.dados.equip?.modelo].filter(Boolean).join(' · ')||'(equipamento não informado)';
+
+/* ===== início ===== */
+function vHome(){
+ const u=ultimas(),n=s=>u.filter(l=>s.includes(l.status)).length,p2=x=>String(x).padStart(2,'0');
+ const tiles=[['#/novo','novo','Novo laudo','Iniciar inspeção'],['#/laudos','laudos','Meus laudos','Consultar documentos'],['#/empresa','empresa','Empresa','Dados institucionais'],['#/profissionais','prof','Profissionais','Cadastro técnico'],['#/clientes','cli','Contratantes','Clientes e locais'],['#/catalogo','eq','Equipamentos','Base para novos laudos'],['#/modelos','mod','Modelos técnicos','Categorias e formulários'],['#/sync','sync','Sincronização','Backup e armazenamento']];
+ const falta=[];if(!emp().razao)falta.push('cadastrar a <b>Empresa</b>');if(!S.profissionais.length)falta.push('cadastrar o <b>Profissional</b> responsável');
+ main(`<div class="card"><div class="row"><h1>FÊNIX | LAUDOS TÉCNICOS</h1></div><p class="mut" style="margin:4px 0 0">Painel de documentação técnica • Versão ${VERSAO}</p>
+ ${falta.length?`<div class="alert info">Primeiros passos: ${falta.join(' e ')}. Esses dados são salvos uma vez e reaproveitados em todos os laudos.</div>`:''}
+ <div class="tiles">${tiles.map(t=>`<a class="tile" href="${t[0]}">${svg(t[1])}<b>${t[2]}</b><span>${t[3]}</span></a>`).join('')}</div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:18px 0 0"><h2>Resumo documental</h2>
+ <div class="stats"><button class="stat" data-act="filtro" data-s="rascunho"><b style="color:#8a3a00">${p2(n(['rascunho']))}</b><span>Rascunhos</span></button><button class="stat" data-act="filtro" data-s="definitivo"><b style="color:var(--ok)">${p2(n(['definitivo','arquivado']))}</b><span>Definitivos</span></button><button class="stat" data-act="filtro" data-s="revisao"><b>${p2(n(['revisao']))}</b><span>Pendentes (em revisão)</span></button></div></div>
+ <div class="acts" style="justify-content:center"><button class="btn sm" data-act="sobre">Sobre</button><button class="btn sm" data-act="ajustes">Ajustes</button></div>`,APP,'');
+ $('#back').style.display='none'}
+
+/* ===== cadastros genéricos ===== */
+const CFG={
+ profissionais:{t:'Profissionais',s:'profissional',campos:()=>[{k:'nome',l:'Nome completo',w:1},{k:'titulo',l:'Título profissional',ph:'Técnico em Eletrotécnica, Eletrônica…'},{k:'conselho',l:'Conselho',t:'select',o:[['','Selecione'],['CFT/CRT','CFT/CRT'],['CREA','CREA'],['Outro','Outro']]},{k:'registro',l:'Número de registro'},{k:'uf',l:'UF do registro',t:'select',o:ufSel},{k:'situacao',l:'Situação cadastral',t:'select',o:[['Não verificada','Não verificada'],['Ativo','Ativo'],['Inativo','Inativo']]},{k:'telefone',l:'Telefone',t:'tel'},{k:'email',l:'E-mail',t:'email'},{k:'qualificacoes',l:'Qualificações / certificações',t:'textarea',w:1},{k:'atribuicoes',l:'Atribuições concedidas (conforme o conselho)',t:'textarea',w:1,hint:'Registre aqui o que consta nas atribuições do profissional.'},{k:'cats',t:'cats',l:'Categorias de equipamento que o profissional pode laudar',hint:'O app só libera a emissão para categorias marcadas. Marque apenas o que a atribuição profissional comprovadamente cobre.'},{k:'assinatura',t:'sign',l:'Assinatura (imagem)'}],lab:o=>o.nome,sub:o=>[o.titulo,[o.conselho,o.registro].filter(Boolean).join(' nº ')].filter(Boolean).join(' • '),val:o=>o.nome?'':'Informe o nome do profissional'},
+ clientes:{t:'Contratantes',s:'contratante',campos:()=>[{k:'tipo',l:'Tipo',t:'select',o:[['PF','Pessoa física'],['PJ','Pessoa jurídica']]},{k:'nome',l:'Nome completo ou razão social'},{k:'doc',t:'cnpj',l:'CPF ou CNPJ',hint:'Para CNPJ, o botão busca razão social e endereço.'},{k:'telefone',l:'Telefone',t:'tel'},{k:'email',l:'E-mail',t:'email'},{k:'cep',l:'CEP'},{k:'logradouro',l:'Logradouro'},{k:'numero',l:'Número'},{k:'bairro',l:'Bairro'},{k:'cidade',l:'Cidade'},{k:'uf',l:'UF',t:'select',o:ufSel},{k:'respAcomp',l:'Responsável pelo acompanhamento',w:1}],lab:o=>o.nome,sub:o=>[o.doc?fmtDoc(o.doc):'',o.cidade].filter(Boolean).join(' • '),val:o=>!o.nome?'Informe o nome ou razão social':(o.doc&&!(validarCPF(o.doc)||validarCNPJ(o.doc))?'CPF/CNPJ inválido':'')},
+ catalogo:{t:'Equipamentos cadastrados',s:'equipamento',campos:()=>[{k:'fabricante',l:'Fabricante'},{k:'modelo',l:'Modelo'},{k:'equipamento',l:'Equipamento',w:1},{k:'categoriaId',l:'Categoria',t:'select',o:[['','—'],...allCats().map(c=>[c.id,c.nome])],w:1},{k:'tensao',l:'Tensão nominal'},{k:'frequencia',l:'Frequência'},{k:'potencia',l:'Potência'}],lab:o=>[o.fabricante,o.modelo].filter(Boolean).join(' ')||o.equipamento,sub:o=>[o.equipamento,[o.tensao,o.frequencia,o.potencia].filter(Boolean).join(' / ')].filter(Boolean).join(' • '),val:o=>(!o.fabricante&&!o.modelo)?'Informe fabricante e/ou modelo':''},
+ modelos:{t:'Modelos personalizados',s:'modelo',campos:()=>[{k:'nome',l:'Nome do modelo',w:1},{k:'desc',l:'Descrição',t:'textarea',w:1},{k:'camposTxt',l:'Campos de identificação extras (um por linha)',t:'textarea',rows:4,w:1},{k:'procTxt',l:'Procedimentos de inspeção (um por linha)',t:'textarea',rows:5,w:1},{k:'medTxt',l:'Medições sugeridas (um por linha: parâmetro | unidade)',t:'textarea',rows:4,w:1,hint:'Limites de aceitação nunca são pré-definidos: vêm do fabricante, da norma ou de critério justificado.'}],lab:o=>o.nome,sub:o=>o.desc||'',val:o=>o.nome?'':'Informe o nome do modelo'}
+};
+function editarEnt(col,id,base,cb){
+ const C=CFG[col],o=id?S[col].find(x=>x.id===id):(base||{});
+ formModal((id?'Editar ':'Novo ')+C.s,C.campos(),o,out=>{const m=C.val(out);if(m)return m;if(out.doc)out.doc=soNum(out.doc);const r={...o,...out,id:o.id||uid()};if(col==='catalogo')r.chave=(r.fabricante+'|'+r.modelo).toLowerCase();salvar(col,r);toast('Salvo');cb?cb(r):rota()})}
+function vLista(col){
+ const C=CFG[col];
+ main(`<div class="row"><h2 style="margin:0">${C.t}</h2><button class="btn pri" data-act="newEnt" data-c="${col}">+ Novo</button></div><input id="q" placeholder="Buscar…" style="margin:10px 0"><div id="lst"></div>${col==='catalogo'?'<div class="alert info">Todo equipamento usado em um laudo entra aqui automaticamente. Ao digitar o mesmo fabricante e modelo em um novo laudo, os dados são preenchidos.</div>':''}`,C.t,'#/');
+ const fill=()=>{const q=$('#q').value.toLowerCase();const it=S[col].filter(o=>(C.lab(o)+' '+C.sub(o)).toLowerCase().includes(q)).sort((a,b)=>alfa(C.lab(a),C.lab(b)));$('#lst').innerHTML=it.map(o=>`<div class="card item"><div><div class="t">${esc(C.lab(o))}</div><div class="s">${esc(C.sub(o))}</div></div><div class="acts" style="margin:0"><button class="btn sm" data-act="editEnt" data-c="${col}" data-id="${o.id}">Editar</button><button class="btn sm danger" data-act="delEnt" data-c="${col}" data-id="${o.id}">Excluir</button></div></div>`).join('')||'<p class="mut">Nada cadastrado ainda.</p>'};
+ $('#q').oninput=fill;fill()}
+function vEmpresa(){
+ const e=emp();
+ main(`<div class="card"><div class="row"><h2 style="margin:0">Empresa</h2><button class="btn pri" data-act="editEmp">${e.razao?'Editar':'Cadastrar'}</button></div>
+ ${e.razao?`${e.logo?`<img class="imgp" src="${e.logo}" alt="">`:''}<div class="t" style="font-weight:700;margin-top:8px">${esc(e.razao)}</div><div class="s mut">${esc(e.fantasia||'')}</div><p>CNPJ ${esc(fmtDoc(e.cnpj))}<br>${esc(endStr(e))}<br>${esc([e.telefone,e.email,e.site].filter(Boolean).join(' • '))}</p><small>Código dos laudos: ${esc((e.prefixo||'FNX').toUpperCase())}-LT-AAAA-NNN</small>`:'<p class="mut">Cadastre uma única vez. Os dados saem no cabeçalho de todos os laudos.</p>'}</div>`,'Empresa','#/')}
+const EMPCAMPOS=()=>[{k:'logo',t:'img',l:'Logomarca',w:1},{k:'cnpj',t:'cnpj',l:'CNPJ',w:1,hint:'Busca razão social e endereço (precisa de internet).'},{k:'razao',l:'Razão social',w:1},{k:'fantasia',l:'Nome fantasia',w:1},{k:'cep',l:'CEP'},{k:'logradouro',l:'Logradouro'},{k:'numero',l:'Número'},{k:'bairro',l:'Bairro'},{k:'cidade',l:'Cidade'},{k:'uf',l:'UF',t:'select',o:ufSel},{k:'telefone',l:'Telefone',t:'tel'},{k:'email',l:'E-mail',t:'email'},{k:'site',l:'Site'},{k:'responsavel',l:'Responsável pela empresa'},{k:'prefixo',l:'Prefixo do código do laudo',ph:'FNX'}];
+function editarEmpresa(){formModal('Empresa',EMPCAMPOS(),emp(),out=>{if(!out.razao)return'Informe a razão social';if(out.cnpj&&!validarCNPJ(out.cnpj))return'CNPJ inválido';out.cnpj=soNum(out.cnpj);out.prefixo=(out.prefixo||'FNX').replace(/[^A-Za-z0-9]/g,'').toUpperCase()||'FNX';salvar('empresa',{...emp(),...out,id:'empresa'});toast('Empresa salva');rota()})}
+
+/* ===== modelos técnicos ===== */
+function vModelos(){
+ main(`<div class="row"><h2 style="margin:0">Modelos técnicos</h2><button class="btn pri" data-act="newEnt" data-c="modelos">+ Novo modelo</button></div><p class="mut">Cada categoria traz seus próprios campos, procedimentos e medições sugeridas. Os modelos prontos servem de ponto de partida; duplique um para adaptar.</p>
+ ${allCats().map(c=>`<div class="card item"><div><div class="t">${esc(c.nome)} ${c.custom?'<span class="badge info">personalizado</span>':''}</div><div class="s">${esc(c.desc)}</div><small>${c.campos.length} campos • ${c.proc.length} procedimentos • ${c.med.length} medições sugeridas</small></div><div class="acts" style="margin:0"><button class="btn sm" data-act="verModelo" data-id="${c.id}">Ver</button>${c.custom?`<button class="btn sm" data-act="editEnt" data-c="modelos" data-id="${c.id}">Editar</button><button class="btn sm danger" data-act="delEnt" data-c="modelos" data-id="${c.id}">Excluir</button>`:`<button class="btn sm" data-act="dupModelo" data-id="${c.id}">Duplicar p/ editar</button>`}</div></div>`).join('')}`,'Modelos técnicos','#/')}
+
+/* ===== lista de laudos ===== */
+const FL={q:'',st:'todos',ord:'az'};
+function vLaudos(){
+ main(`<h2 style="margin:0 0 8px">Meus laudos</h2><input id="q" placeholder="Buscar por contratante, equipamento, série ou número…" value="${esc(FL.q)}"><div class="chips">${[['todos','Todos'],['rascunho','Rascunhos'],['revisao','Em revisão'],['definitivo','Definitivos'],['arquivado','Arquivados']].map(([k,t])=>`<button class="chip${FL.st===k?' on':''}" data-act="chipSt" data-s="${k}">${t}</button>`).join('')}</div>
+ <label class="f" style="max-width:260px"><span>Ordenar</span><select id="ord"><option value="az"${FL.ord==='az'?' selected':''}>Contratante (A–Z)</option><option value="num"${FL.ord==='num'?' selected':''}>Número (mais recente)</option></select></label><div id="lst" style="margin-top:12px"></div>`,'Meus laudos','#/');
+ $('#q').oninput=e=>{FL.q=e.target.value;listaLaudos()};$('#ord').onchange=e=>{FL.ord=e.target.value;listaLaudos()};listaLaudos()}
+function listaLaudos(){
+ const q=FL.q.toLowerCase();let it=ultimas().filter(l=>(FL.st==='todos'||l.status===FL.st)&&(`${l.numero} ${nomeCli(l)} ${eqTxt(l)} ${l.dados.equip?.serie||''}`).toLowerCase().includes(q));
+ it.sort(FL.ord==='az'?(a,b)=>alfa(nomeCli(a),nomeCli(b))||b.seq-a.seq:(a,b)=>b.ano-a.ano||b.seq-a.seq);
+ const nv=l=>S.laudos.filter(x=>x.grupoId===l.grupoId).length;
+ $('#lst').innerHTML=it.map(l=>`<div class="card"><div class="item"><div><div class="t">${esc(l.numero)}${l.versao>1?' · v'+l.versao:''} ${badge(l.status)}</div><div class="s">${esc(nomeCli(l))}</div><div class="s">${esc(eqTxt(l))}${l.dados.equip?.serie?' • série '+esc(l.dados.equip.serie):''}</div><small>${l.emitidoEm?'Emitido em '+fmtDH(l.emitidoEm):'Atualizado em '+fmtDH(l.atualizadoEm)}</small></div></div>
+ <div class="acts"><button class="btn sm pri" data-act="abrir" data-id="${l.id}">${l.status==='definitivo'||l.status==='arquivado'?'Ver':'Abrir'}</button><button class="btn sm" data-act="pdf" data-id="${l.id}">Documento / PDF</button><button class="btn sm" data-act="dup" data-id="${l.id}">Duplicar</button>${l.status==='definitivo'?`<button class="btn sm gold" data-act="novaVer" data-id="${l.id}">Corrigir (nova versão)</button><button class="btn sm" data-act="arquivar" data-id="${l.id}">Arquivar</button>`:''}${l.status==='arquivado'?`<button class="btn sm" data-act="desarquivar" data-id="${l.id}">Desarquivar</button>`:''}${nv(l)>1?`<button class="btn sm" data-act="vers" data-id="${l.id}">Versões (${nv(l)})</button>`:''}${l.status==='rascunho'||l.status==='revisao'?`<button class="btn sm danger" data-act="delLaudo" data-id="${l.id}">Excluir</button>`:''}</div></div>`).join('')||'<p class="mut">Nenhum laudo encontrado.</p>'}
+
+/* ===== novo laudo / versões ===== */
+function dadosVazios(){const unico=S.profissionais.length===1?S.profissionais[0].id:'';const e=emp();return{profissionalId:unico,clienteId:'',dataInspecao:hoje(),local:'',acompanhante:'',os:'',finalidadeSel:'',finalidadeTxt:'',categoriaId:'',equip:{extra:{}},fotosEquip:[],relato:{},procedimentos:[],instrumentos:[],medicoes:[],fotosEvid:[],diag:{},constatacoes:'',hipoteses:'',conclusao:{},resp:{tipoReg:'',numReg:'',local:[e.cidade,e.uf].filter(Boolean).join(' – '),refs:[],refsExtra:''},assTipo:'visual'}}
+function criarLaudo(dados){const ano=new Date().getFullYear();const seq=Math.max(0,...S.laudos.filter(x=>x.ano===ano).map(x=>x.seq))+1;const pre=(emp().prefixo||'FNX').toUpperCase();const id=uid();return salvar('laudos',{id,grupoId:id,versao:1,ano,seq,numero:`${pre}-LT-${ano}-${String(seq).padStart(3,'0')}`,status:'rascunho',criadoEm:agora(),dados})}
+function duplicar(l){const d=clone(l.dados);const nv=dadosVazios();Object.assign(nv,{profissionalId:d.profissionalId,clienteId:d.clienteId,local:d.local,acompanhante:d.acompanhante,finalidadeSel:d.finalidadeSel,finalidadeTxt:d.finalidadeTxt,categoriaId:d.categoriaId,equip:d.equip,resp:{...nv.resp,local:d.resp?.local||nv.resp.local},assTipo:d.assTipo});return criarLaudo(nv)}
+function novaVersao(l){const n=clone(l);n.id=uid();n.versao=l.versao+1;n.status='rascunho';n.criadoEm=agora();delete n.emitidoEm;delete n.hash;delete n.snap;n.substitui=l.id;salvar('laudos',n);return n}
+const sha256=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+
+/* ===== editor do laudo ===== */
+const STEPS=['Identificação','Equipamento','Histórico','Procedimentos','Medições','Diagnóstico','Conclusão','Responsabilidade','Revisão'];
+let L=null,STEP=0,LOCK=false,sujo=false,tmr=null;
+function agendar(){sujo=true;clearTimeout(tmr);const s=$('#svd');if(s)s.textContent='Salvando…';tmr=setTimeout(gravar,500)}
+function gravar(){clearTimeout(tmr);if(!L||LOCK||!sujo)return;sujo=false;if(L.status==='revisao')L.status='rascunho';upsertCatalogo();upsertInstrumentos();salvar('laudos',L);const s=$('#svd');if(s)s.textContent='Salvo neste aparelho'}
+function upsertCatalogo(){const q=L.dados.equip||{};if(!q.fabricante&&!q.modelo)return;const ch=((q.fabricante||'')+'|'+(q.modelo||'')).toLowerCase();let o=S.catalogo.find(x=>x.chave===ch);const n=o||{id:uid(),chave:ch};['fabricante','modelo','equipamento','tensao','frequencia','potencia'].forEach(k=>{if(q[k])n[k]=q[k]});n.categoriaId=L.dados.categoriaId||n.categoriaId||'';n.extra={...(n.extra||{}),...Object.fromEntries(Object.entries(q.extra||{}).filter(([,v])=>v))};if(!o||JSON.stringify(o)!==JSON.stringify(n))salvar('catalogo',n)}
+function upsertInstrumentos(){(L.dados.instrumentos||[]).forEach(i=>{if(!i.nome)return;const ch=(i.nome+'|'+(i.serie||'')).toLowerCase();const o=S.instrumentos.find(x=>x.chave===ch);const n={...(o||{id:uid(),chave:ch}),nome:i.nome,fabricante:i.fabricante,modelo:i.modelo,serie:i.serie,cert:i.cert,validade:i.validade};if(!o||JSON.stringify(o)!==JSON.stringify(n))salvar('instrumentos',n)})}
+function fld(l,p,o={}){const v=getP(L.dados,p)??'';const full=o.w?' full':'';
+ if(o.t==='ta')return`<label class="f full"><span>${esc(l)}</span><textarea data-p="${p}" rows="${o.rows||3}" placeholder="${esc(o.ph||'')}">${esc(v)}</textarea>${o.h?`<small>${esc(o.h)}</small>`:''}</label>`;
+ if(o.t==='sel')return`<label class="f${full}"><span>${esc(l)}</span><select data-p="${p}">${o.o.map(x=>{const[a,b]=Array.isArray(x)?x:[x,x];return`<option value="${esc(a)}"${a===v?' selected':''}>${esc(b)}</option>`}).join('')}</select>${o.h?`<small>${esc(o.h)}</small>`:''}</label>`;
+ return`<label class="f${full}"><span>${esc(l)}</span><input data-p="${p}" type="${o.t||'text'}" value="${esc(v)}" placeholder="${esc(o.ph||'')}"${o.list?` list="${o.list}"`:''}>${o.h?`<small>${esc(o.h)}</small>`:''}</label>`}
+function fotosHTML(key,tit){const fs=L.dados[key]||[];return`<h2>${tit}</h2><div class="thumbs">${fs.map((f,i)=>`<div class="th"><img src="${f.src}" alt=""><input data-p="${key}.${i}.legenda" value="${esc(f.legenda)}" placeholder="Legenda (ex.: placa de identificação)"><button class="x ed" data-act="delFoto" data-k="${key}" data-i="${i}">Remover</button></div>`).join('')}</div><label class="btn sm ed" style="margin-top:8px">+ Adicionar foto<input type="file" accept="image/*" multiple data-foto="${key}" hidden></label>`}
+const opts=(arr,sel)=>arr.map(([a,b])=>`<option value="${esc(a)}"${a===sel?' selected':''}>${esc(b)}</option>`).join('');
+function histSerie(){const s=(L.dados.equip?.serie||'').trim().toLowerCase();if(!s)return'';const o=S.laudos.filter(x=>x.grupoId!==L.grupoId&&(x.dados.equip?.serie||'').trim().toLowerCase()===s&&!S.laudos.some(y=>y.grupoId===x.grupoId&&y.versao>x.versao));return o.length?`<div class="alert info">Este número de série já aparece em ${o.length} laudo(s) anterior(es): ${o.map(x=>`<a href="#/laudo/${x.id}/0">${esc(x.numero)}</a> (${fmtData(x.dados.dataInspecao)})`).join(', ')}.</div>`:''}
+const STEPF=[
+ ()=>{const pr=[...S.profissionais].sort((a,b)=>alfa(a.nome,b.nome)),cl=[...S.clientes].sort((a,b)=>alfa(a.nome,b.nome));return`<div class="grid2">
+  <div class="f"><label class="f"><span>Profissional responsável</span><select data-p="profissionalId"><option value="">Selecione…</option>${pr.map(p=>`<option value="${p.id}"${p.id===L.dados.profissionalId?' selected':''}>${esc(p.nome)}</option>`).join('')}</select></label><button class="btn sm ed" data-act="novoProf" style="margin-top:6px">+ Novo profissional</button></div>
+  <div class="f"><label class="f"><span>Contratante</span><select data-p="clienteId"><option value="">Selecione…</option>${cl.map(p=>`<option value="${p.id}"${p.id===L.dados.clienteId?' selected':''}>${esc(p.nome)}</option>`).join('')}</select></label><button class="btn sm ed" data-act="novoCli" style="margin-top:6px">+ Novo contratante</button></div>
+  ${fld('Data da inspeção','dataInspecao',{t:'date'})}${fld('Nº do contrato / ordem de serviço','os')}${fld('Local da inspeção','local',{w:1,ph:'Ex.: residência do contratante, endereço…'})}${fld('Quem acompanhou a inspeção','acompanhante',{w:1})}
+  ${fld('Finalidade do laudo','finalidadeSel',{t:'sel',w:1,o:[['','Selecione…'],...FINALIDADES,['__outra','Outra (descrever abaixo)']]})}${fld('Descrição da finalidade (complemento ou texto personalizado)','finalidadeTxt',{t:'ta'})}
+  <label class="f full"><span>Categoria do equipamento (define campos, procedimentos e medições)</span><select data-p="categoriaId"><option value="">Selecione…</option>${allCats().map(c=>`<option value="${c.id}"${c.id===L.dados.categoriaId?' selected':''}>${esc(c.nome)}</option>`).join('')}</select></label></div>`},
+ ()=>{const cat=catPor(L.dados.categoriaId),q=L.dados.equip;const fab=[...new Set(S.catalogo.map(c=>c.fabricante).filter(Boolean))].sort(alfa);const eqs=[...new Set(S.catalogo.map(c=>c.equipamento).filter(Boolean))].sort(alfa);
+  return`<datalist id="dlFab">${fab.map(f=>`<option value="${esc(f)}">`).join('')}</datalist><datalist id="dlEq">${eqs.map(f=>`<option value="${esc(f)}">`).join('')}</datalist><datalist id="dlMod">${S.catalogo.map(c=>`<option value="${esc(c.modelo)}">`).join('')}</datalist>
+  <div class="alert info">Dica: se este fabricante e modelo já foram usados antes, os dados nominais são preenchidos sozinhos.</div><div class="grid2">
+  ${fld('Equipamento','equip.equipamento',{list:'dlEq',ph:'Ex.: Forno micro-ondas'})}${fld('Fabricante','equip.fabricante',{list:'dlFab'})}${fld('Modelo','equip.modelo',{list:'dlMod'})}${fld('Número de série','equip.serie')}<div class="full" id="histSerie">${histSerie()}</div>
+  ${fld('Patrimônio / etiqueta','equip.patrimonio')}${fld('Ano de fabricação','equip.ano')}${fld('Tensão nominal','equip.tensao',{ph:'220 V'})}${fld('Frequência','equip.frequencia',{ph:'60 Hz'})}${fld('Potência','equip.potencia',{ph:'1.200 W'})}${fld('Estado de conservação','equip.conservacao',{t:'sel',o:['','Bom','Regular','Ruim']})}${fld('Localização do equipamento','equip.localizacao',{w:1})}
+  ${(cat?.campos||[]).map(([k,l])=>fld(l,'equip.extra.'+k)).join('')}</div>${fotosHTML('fotosEquip','Fotografias do equipamento')}<small>Inclua a placa de identificação, o equipamento completo e detalhes relevantes.</small>`},
+ ()=>`<div class="alert warn">O relato do contratante <b>não é constatação técnica</b>. O laudo registra os dois separadamente.</div><div class="grid2">${fld('Relato do contratante','relato.texto',{t:'ta',rows:5})}${fld('Sintomas apresentados','relato.sintomas',{t:'ta'})}${fld('Data em que o problema começou','relato.inicio',{t:'date'})}${fld('Condições de utilização','relato.condicoes')}${fld('Histórico de manutenção','relato.manut',{t:'ta',w:1})}${fld('Intervenções anteriores','relato.interv',{t:'ta'})}${fld('Ocorrências conhecidas','relato.ocorr',{t:'ta'})}${fld('Informações complementares','relato.compl',{t:'ta'})}</div>`,
+ ()=>{const d=L.dados;if(!d.procedimentos.length&&!d.procAuto&&d.categoriaId&&!LOCK){d.procAuto=1;carregarProc(false)}
+  const inst=[...S.instrumentos].sort((a,b)=>alfa(a.nome,b.nome));
+  return`<h2 style="margin-top:0">Procedimentos de inspeção</h2><p class="mut">Marque cada procedimento como realizado, não realizado ou não aplicável. Nunca marque como realizado o que não foi feito.</p>
+  ${d.procedimentos.map((p,i)=>`<div class="rc"><div class="grid2"><label class="f full"><span>Procedimento</span><input data-p="procedimentos.${i}.nome" value="${esc(p.nome)}"></label><label class="f"><span>Situação</span><select data-p="procedimentos.${i}.status">${opts([['pendente','Pendente (marcar)'],['realizado','Realizado'],['nao','Não realizado'],['na','Não aplicável']],p.status||'pendente')}</select></label><label class="f"><span>Data</span><input type="date" data-p="procedimentos.${i}.data" value="${esc(p.data||'')}"></label><label class="f full"><span>Resultado / observação (obrigatório se realizado)</span><input data-p="procedimentos.${i}.resultado" value="${esc(p.resultado||'')}"></label></div><button class="x ed" data-act="delRow" data-l="procedimentos" data-i="${i}">Excluir</button></div>`).join('')}
+  <div class="acts ed"><button class="btn sm" data-act="addProc">+ Procedimento</button><button class="btn sm" data-act="loadProc">Carregar do modelo</button></div>
+  <h2>Instrumentos utilizados</h2><datalist id="dlInst">${inst.map(i=>`<option value="${esc(i.nome)}">`).join('')}</datalist>
+  ${d.instrumentos.map((p,i)=>`<div class="rc"><div class="grid2">${fld('Instrumento','instrumentos.'+i+'.nome',{list:'dlInst',ph:'Multímetro digital'})}${fld('Fabricante','instrumentos.'+i+'.fabricante')}${fld('Modelo','instrumentos.'+i+'.modelo')}${fld('Nº de série / patrimônio','instrumentos.'+i+'.serie')}${fld('Certificado de calibração','instrumentos.'+i+'.cert',{h:'Se aplicável'})}${fld('Validade da calibração','instrumentos.'+i+'.validade',{t:'date'})}</div><button class="x ed" data-act="delRow" data-l="instrumentos" data-i="${i}">Excluir</button></div>`).join('')}
+  <div class="acts ed"><button class="btn sm" data-act="addInst">+ Instrumento</button></div><small>Quando a medição depender de rastreabilidade metrológica, registre a calibração.</small>`},
+ ()=>{const d=L.dados;return`<div class="alert warn">O app <b>não presume limites de aceitação</b>. Para avaliar como conforme/não conforme, informe a referência e a fonte do critério.</div>
+  ${d.medicoes.map((m,i)=>`<div class="rc"><div class="grid2">${fld('Parâmetro','medicoes.'+i+'.parametro')}${fld('Unidade','medicoes.'+i+'.unidade')}${fld('Referência / critério','medicoes.'+i+'.referencia',{ph:'Ex.: 220 V ±10%'})}${fld('Fonte do critério','medicoes.'+i+'.fonte',{t:'sel',o:FONTES.map(f=>[f,f||'Selecione…'])})}${fld('Resultado medido','medicoes.'+i+'.resultado')}${fld('Avaliação','medicoes.'+i+'.avaliacao',{t:'sel',o:AVAL})}${fld('Observação','medicoes.'+i+'.obs',{w:1})}</div><button class="x ed" data-act="delRow" data-l="medicoes" data-i="${i}">Excluir</button></div>`).join('')||'<p class="mut">Nenhuma medição registrada.</p>'}
+  <div class="acts ed"><button class="btn sm" data-act="addMed">+ Medição</button><button class="btn sm" data-act="sugMed">Inserir parâmetros sugeridos</button></div>${fotosHTML('fotosEvid','Fotografias de evidências e medições')}`},
+ ()=>`<div class="alert warn">Separe o que foi <b>constatado</b> (comprovado por teste/medição) do que é <b>hipótese</b> (a investigar). Uma hipótese nunca vira constatação sem teste.</div><div class="grid2">${fld('Constatações (uma por linha)','constatacoes',{t:'ta',rows:4,h:'Somente o que foi observado/medido.'})}${fld('Hipóteses diagnósticas (uma por linha)','hipoteses',{t:'ta',rows:4,h:'Possíveis origens, ainda não comprovadas.'})}${fld('Defeito identificado','diag.defeito',{t:'ta'})}${fld('Causa provável','diag.causa',{t:'ta'})}${fld('Componentes comprometidos','diag.componentes',{t:'ta'})}${fld('Condições de funcionamento','diag.funcionamento',{t:'ta'})}${fld('Riscos identificados','diag.riscos',{t:'ta'})}${fld('Consequências de manter em operação','diag.consequencias',{t:'ta'})}${fld('Necessidade de reparo ou substituição','diag.necessidade',{t:'ta',w:1})}</div><div class="acts"><button class="btn gold" data-act="promptIA">Copiar prompt para IA (apoio à redação)</button></div><small>A IA só ajuda na redação; a interpretação técnica é do profissional.</small>`,
+ ()=>`<div class="grid2">${fld('Classificação técnica','conclusao.classe',{t:'sel',w:1,o:CLASSES})}${fld('Justificativa da classificação','conclusao.justificativa',{t:'ta',rows:4})}${fld('Recomendações técnicas e medidas corretivas','conclusao.recomendacoes',{t:'ta',rows:4})}${fld('Prazo recomendado (quando tecnicamente justificável)','conclusao.prazo',{w:1})}</div>`,
+ ()=>{const cat=catPor(L.dados.categoriaId),sug=cat?.refs||[];return`<div class="grid2">${fld('Registro de responsabilidade técnica','resp.tipoReg',{t:'sel',o:[['','Selecione…'],['TRT','TRT'],['ART','ART'],['nenhum','Não aplicável a esta atividade']],h:'O laudo tem numeração própria; o TRT/ART é apenas informado.'})}${fld('Número do TRT / ART','resp.numReg')}${fld('Local de emissão','resp.local')}${fld('Tipo de assinatura','assTipo',{t:'sel',o:[['visual','Visual (imagem da assinatura)'],['eletronica','Eletrônica com registro de autoria e integridade'],['icp','Digital ICP-Brasil (aplicada fora do app)']]})}
+  <div class="f full"><span class="lb">Referências técnicas utilizadas</span>${REFS.map(([id,t])=>`<label class="chk"><input type="checkbox" data-ref="${id}"${(L.dados.resp.refs||[]).includes(id)?' checked':''}${LOCK?' disabled':''}> ${esc(t)}${sug.includes(id)?' <span class="badge info">sugerida</span>':''}</label>`).join('')}<small>Sugestão não significa aplicabilidade. Confira a edição vigente e a aplicação de cada norma antes de citar.</small></div>${fld('Outras referências (uma por linha)','resp.refsExtra',{t:'ta'})}</div>`},
+ ()=>{const p=revisar(L),b=p.filter(x=>x.n==='bloq'),a=p.filter(x=>x.n==='aviso');
+  return`${LOCK?`<div class="alert ok">Documento ${L.status==='arquivado'?'arquivado':'emitido'} em ${fmtDH(L.emitidoEm)}.<br><small>Código de integridade (SHA-256): ${esc(L.hash||'')}</small><br>Para corrigir, crie uma nova versão em "Meus laudos". A versão emitida é preservada.</div>`:`<div class="alert ${b.length?'bad':'ok'}">${b.length?`${b.length} pendência(s) impedem a emissão definitiva.`:'Nenhuma pendência bloqueante. Revise o documento e emita.'}</div>`}
+  ${[...b,...a].map(x=>`<div class="pend"><span>${x.n==='bloq'?'⛔':'⚠️'} ${esc(x.m)}</span><button class="btn sm" data-act="irStep" data-s="${x.s}">Ir</button></div>`).join('')}
+  <div class="acts"><button class="btn" data-act="previa">Visualizar documento</button>${LOCK?'':L.status==='rascunho'?'<button class="btn pri" data-act="paraRevisao">Enviar para revisão técnica</button>':'<button class="btn" data-act="voltaRasc">Voltar a editar</button><button class="btn gold" data-act="emitir">Emitir versão definitiva…</button>'}</div>
+  <p class="mut" style="margin-top:14px;font-size:13px">Responsabilidade: este app é ferramenta auxiliar de documentação. A inspeção, os dados, a interpretação e a emissão são do profissional legalmente habilitado.</p>`}
+];
+function vEditor(id,st){
+ const l=S.laudos.find(x=>x.id===id);if(!l){toast('Laudo não encontrado');return go('#/laudos')}
+ if(L&&L.id!==l.id)gravar();L=l;LOCK=l.status==='definitivo'||l.status==='arquivado';STEP=Math.max(0,Math.min(8,+st||0));
+ main(`<div class="row"><div><b>${esc(l.numero)}${l.versao>1?' · v'+l.versao:''}</b> ${badge(l.status)}</div><span class="mut" id="svd" style="font-size:12px">${LOCK?'Somente leitura':'Salvo neste aparelho'}</span></div>
+ <div class="steps">${STEPS.map((s,i)=>`<button class="stp${i===STEP?' on':''}" data-act="irStep" data-s="${i}">${i+1}. ${s}</button>`).join('')}</div>
+ <div class="card ${LOCK?'lock':''}" id="stepbox">${STEPF[STEP]()}</div>
+ <div class="bar"><div><button class="btn" data-act="irStep" data-s="${STEP-1}" ${STEP===0?'disabled':''}>← Anterior</button><button class="btn sm" data-act="previa">Visualizar</button><button class="btn pri" data-act="irStep" data-s="${STEP+1}" ${STEP===8?'disabled':''}>Próximo →</button></div></div>`,'Laudo '+l.numero,'#/laudos');
+ if(LOCK)$$('#stepbox [data-p]').forEach(x=>x.disabled=true)}
+function recarregaStep(){const y=window.scrollY;$('#stepbox').innerHTML=STEPF[STEP]();if(LOCK)$$('#stepbox [data-p]').forEach(x=>x.disabled=true);window.scrollTo(0,y)}
+function carregarProc(msg=true){const cat=catPor(L.dados.categoriaId);if(!cat){toast('Escolha a categoria na etapa 1');return}const ex=new Set(L.dados.procedimentos.map(p=>p.nome));let n=0;cat.proc.forEach(p=>{if(!ex.has(p)){L.dados.procedimentos.push({nome:p,status:'pendente',resultado:'',data:''});n++}});if(n){agendar();msg&&recarregaStep()}else msg&&toast('Todos os procedimentos do modelo já estão na lista')}
+function aplicarCatalogo(){const q=L.dados.equip;if(!q.fabricante||!q.modelo)return;const ch=(q.fabricante+'|'+q.modelo).toLowerCase();const c=S.catalogo.find(x=>x.chave===ch);if(!c)return;let n=0;['equipamento','tensao','frequencia','potencia'].forEach(k=>{if(!q[k]&&c[k]){q[k]=c[k];n++}});q.extra=q.extra||{};Object.entries(c.extra||{}).forEach(([k,v])=>{if(!q.extra[k]&&v){q.extra[k]=v;n++}});if(!L.dados.categoriaId&&c.categoriaId){L.dados.categoriaId=c.categoriaId;n++}if(n){agendar();recarregaStep();toast('Dados do equipamento preenchidos a partir do cadastro')}}
+/* ===== revisão técnica ===== */
+function revisar(l){
+ const d=l.dados,P=S.profissionais.find(p=>p.id===d.profissionalId),C=S.clientes.find(c=>c.id===d.clienteId),q=d.equip||{},cat=catPor(d.categoriaId),out=[];
+ const B=(m,s)=>out.push({n:'bloq',m,s}),A=(m,s)=>out.push({n:'aviso',m,s}),vz=x=>!(x||'').toString().trim();
+ if(!emp().razao)B('Empresa não cadastrada (cabeçalho institucional).',0);
+ if(!P)B('Selecione o profissional responsável.',0);else{if(!P.conselho||!P.registro)B('Profissional sem conselho e/ou número de registro cadastrado.',0);if(cat&&!(P.cats||[]).includes(cat.id))B(`A categoria "${cat.nome}" não consta nas atribuições cadastradas do profissional. Confirme a atribuição junto ao conselho antes de emitir.`,0)}
+ if(!C)B('Selecione o contratante.',0);
+ if(!cat)B('Selecione a categoria do equipamento.',0);
+ if(vz(d.local))B('Informe o local da inspeção.',0);
+ if(!d.finalidadeSel||(d.finalidadeSel==='__outra'&&vz(d.finalidadeTxt)))B('Informe a finalidade do laudo.',0);
+ if(vz(q.equipamento))B('Informe o equipamento.',1);
+ if(vz(q.fabricante)||vz(q.modelo)||vz(q.serie))A('Fabricante, modelo ou número de série não informados.',1);
+ if(!(d.fotosEquip||[]).length)A('Nenhuma fotografia do equipamento ou da placa de identificação.',1);
+ if(vz(d.relato?.texto))A('Relato do contratante não preenchido.',2);
+ const pr=d.procedimentos||[];if(!pr.length)B('Nenhum procedimento de inspeção registrado.',3);
+ pr.forEach(p=>{if(!p.status||p.status==='pendente')B(`Procedimento sem situação (realizado, não realizado ou não aplicável): "${p.nome}".`,3);else if(p.status==='realizado'&&vz(p.resultado))B(`Procedimento realizado sem resultado: "${p.nome}".`,3)});
+ const md=d.medicoes||[];
+ md.forEach(m=>{const n=m.parametro||'(sem nome)';if(vz(m.resultado))B(`Medição "${n}" sem resultado.`,4);if((m.avaliacao==='conforme'||m.avaliacao==='nao')&&(vz(m.referencia)||vz(m.fonte)))B(`Medição "${n}": a avaliação exige referência e fonte do critério (fabricante, norma ou critério justificado).`,4);if(!m.avaliacao)A(`Medição "${n}" sem avaliação (será apresentada apenas como registro).`,4)});
+ if(md.length&&!(d.instrumentos||[]).length)A('Há medições, mas nenhum instrumento foi registrado.',3);
+ (d.instrumentos||[]).forEach(i=>{if(vz(i.nome))B('Instrumento sem nome.',3)});
+ const cn=d.conclusao||{},nc=md.some(m=>m.avaliacao==='nao');
+ if(vz(d.diag?.causa)===false&&vz(d.hipoteses)&&vz(d.constatacoes))A('Há causa provável, mas nenhuma constatação ou hipótese registrada que a sustente.',5);
+ if(vz(d.constatacoes)&&vz(d.hipoteses)&&vz(d.diag?.defeito))A('Diagnóstico sem constatações, hipóteses ou defeito registrados.',5);
+ if(!cn.classe)B('Selecione a classificação técnica da conclusão.',6);
+ if(vz(cn.justificativa))B('Justifique a classificação técnica.',6);
+ if((cn.classe==='apto'||cn.classe==='restricoes')&&nc)B('Incoerência: conclusão favorável com medição avaliada como não conforme.',6);
+ if((cn.classe==='inapto'||cn.classe==='manutencao')&&!nc&&vz(d.constatacoes))A('Conclusão desfavorável sem constatação registrada nem medição não conforme.',6);
+ if(vz(cn.recomendacoes))A('Recomendações técnicas não preenchidas.',6);
+ const r=d.resp||{};
+ if(!r.tipoReg)B('Informe o TRT/ART ou marque "não aplicável".',7);
+ else if((r.tipoReg==='TRT'||r.tipoReg==='ART')&&vz(r.numReg))B(`Informe o número do ${r.tipoReg}.`,7);
+ else if(r.tipoReg==='nenhum')A('Confirme que esta atividade dispensa TRT/ART.',7);
+ if(vz(r.local))B('Informe o local de emissão.',7);
+ if(!(r.refs||[]).length&&vz(r.refsExtra))A('Nenhuma referência técnica selecionada. Confira a aplicabilidade das normas.',7);
+ if(d.assTipo==='visual'&&P&&!P.assinatura)A('Profissional sem imagem de assinatura cadastrada.',7);
+ return out}
+
+/* ===== documento ===== */
+function snapVivo(l){const d=l.dados;return{empresa:clone(emp()),profissional:clone(S.profissionais.find(p=>p.id===d.profissionalId)||{}),contratante:clone(S.clientes.find(c=>c.id===d.clienteId)||{})}}
+const snapDe=l=>l.snap||snapVivo(l);
+const STP={realizado:'Realizado',nao:'Não realizado',na:'Não aplicável',pendente:'Pendente'};
+function docHTML(l){
+ const d=l.dados,sn=snapDe(l),E=sn.empresa||{},P=sn.profissional||{},C=sn.contratante||{},q=d.equip||{},cat=catPor(d.categoriaId),r=d.resp||{},cn=d.conclusao||{},rl=d.relato||{},dg=d.diag||{};
+ const def=l.status==='definitivo'||l.status==='arquivado',cod=l.numero+(l.versao>1?' v'+l.versao:'');
+ const val=v=>(v===''||v==null)?'<span class="nd">Não informado</span>':nl(v);
+ const kv=rows=>`<table class="kv">${rows.map(([a,b])=>`<tr><th>${esc(a)}</th><td>${val(b)}</td></tr>`).join('')}</table>`;
+ const nE=(d.fotosEquip||[]).length;
+ const figs=(arr,off)=>(arr||[]).length?`<div class="figs">${arr.map((f,i)=>`<figure><img src="${f.src}" alt=""><figcaption>Figura ${off+i+1} – ${esc(f.legenda||'sem legenda')}</figcaption></figure>`).join('')}</div>`:'';
+ const lista=t=>linhas(t).length?`<ul>${linhas(t).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="nd">Nenhum registro.</p>';
+ const fin=d.finalidadeSel==='__outra'?d.finalidadeTxt:[d.finalidadeSel,d.finalidadeTxt].filter(Boolean).join('\n\n');
+ const refs=[...(r.refs||[]).map(refTxt),...linhas(r.refsExtra)];
+ const dataEm=def?fmtData(l.emitidoEm):'____/____/______';
+ let sig='';
+ if(d.assTipo==='eletronica')sig=`<div class="sig"><div class="box" style="text-align:left">Assinado eletronicamente por <b>${esc(P.nome||'')}</b> (${esc([P.conselho,P.registro].filter(Boolean).join(' '))}) em ${def?esc(fmtDH(l.emitidoEm)):'(pendente de emissão)'}.<br>Código de integridade (SHA-256): ${def?esc(l.hash):'—'}</div></div>`;
+ else sig=`<div class="sig">${d.assTipo==='visual'&&P.assinatura?`<img src="${P.assinatura}" alt="">`:'<div style="height:54px"></div>'}<div class="ln"><b>${esc(P.nome||'')}</b><br>${esc(P.titulo||'')} | ${esc([P.conselho,P.registro].filter(Boolean).join(' nº '))}</div><div class="note" style="border:0;background:none">${d.assTipo==='icp'?'Documento destinado à assinatura digital com certificado ICP-Brasil, a ser aplicada ao PDF fora deste aplicativo.':'Assinatura visual — não constitui assinatura digital certificada.'}</div></div>`;
+ return`<div class="doc">
+ ${def?'':'<div class="wm">RASCUNHO<br>SEM VALIDADE COMO<br>DOCUMENTO DEFINITIVO</div><div class="rasc">RASCUNHO – SEM VALIDADE COMO DOCUMENTO DEFINITIVO</div>'}
+ <div class="pf-head">${esc(E.fantasia||E.razao||'')} · Laudo técnico ${esc(cod)}</div>
+ <div class="pf-foot">${esc(cod)} · ${def?'Emitido em '+esc(fmtDH(l.emitidoEm))+' · SHA-256 '+esc((l.hash||'').slice(0,16)):'Rascunho — sem validade como documento definitivo'}</div>
+ <div class="dh">${E.logo?`<img src="${E.logo}" alt="">`:''}<div class="e"><b>${esc(E.razao||'Empresa não cadastrada')}</b>${E.fantasia?`<div>${esc(E.fantasia)}</div>`:''}<div>${E.cnpj?'CNPJ '+esc(fmtDoc(E.cnpj)):''}</div><div>${esc(endStr(E))}</div><div>${esc([E.telefone,E.email,E.site].filter(Boolean).join(' • '))}</div></div><div class="dn"><b>LAUDO Nº ${esc(l.numero)}</b>${l.versao>1?'Versão '+l.versao+'<br>':''}Situação: ${ST[l.status][0]}<br>Inspeção: ${fmtData(d.dataInspecao)}</div></div>
+ <h1>Laudo técnico de inspeção e diagnóstico</h1><div class="sub">${esc(cat?.nome||'Equipamento eletroeletrônico')}</div>
+ <h2>1. Identificação da empresa</h2>${kv([['Empresa',E.razao],['Nome fantasia',E.fantasia],['CNPJ',E.cnpj?fmtDoc(E.cnpj):''],['Endereço',endStr(E)],['Contato',[E.telefone,E.email,E.site].filter(Boolean).join(' • ')],['Responsável pela empresa',E.responsavel]])}
+ <h2>2. Identificação do profissional</h2>${kv([['Nome',P.nome],['Título profissional',P.titulo],['Conselho / registro',[P.conselho,P.registro,P.uf].filter(Boolean).join(' • ')],['Situação cadastral',P.situacao],['Contato',[P.telefone,P.email].filter(Boolean).join(' • ')],['Qualificações',P.qualificacoes],['Atribuições',P.atribuicoes]])}
+ <h2>3. Identificação do contratante</h2>${kv([['Contratante',C.nome],['CPF / CNPJ',C.doc?fmtDoc(C.doc):''],['Contato',[C.telefone,C.email].filter(Boolean).join(' • ')],['Endereço',endStr(C)],['Local da inspeção',d.local],['Acompanhamento da inspeção',d.acompanhante||C.respAcomp],['Contrato / O.S.',d.os]])}
+ <h2>4. Identificação do equipamento</h2>${kv([['Categoria',cat?.nome],['Equipamento',q.equipamento],['Fabricante',q.fabricante],['Modelo',q.modelo],['Número de série',q.serie],['Patrimônio / etiqueta',q.patrimonio],['Ano de fabricação',q.ano],['Tensão nominal',q.tensao],['Frequência',q.frequencia],['Potência',q.potencia],['Estado de conservação',q.conservacao],['Localização',q.localizacao],...(cat?.campos||[]).map(([k,lb])=>[lb,q.extra?.[k]])])}${figs(d.fotosEquip,0)}
+ <h2>5. Objeto e finalidade do laudo</h2><p>${val(fin)}</p>
+ <h2>6. Histórico e informações preliminares</h2><div class="note">As informações abaixo foram fornecidas pelo contratante e não constituem, isoladamente, constatação técnica.</div>${kv([['Relato do contratante',rl.texto],['Sintomas apresentados',rl.sintomas],['Início do problema',rl.inicio?fmtData(rl.inicio):''],['Condições de utilização',rl.condicoes],['Histórico de manutenção',rl.manut],['Intervenções anteriores',rl.interv],['Ocorrências conhecidas',rl.ocorr],['Informações complementares',rl.compl]])}
+ <h2>7. Procedimentos e metodologia de inspeção</h2>${(d.procedimentos||[]).length?`<table><tr><th>Procedimento</th><th>Situação</th><th>Data</th><th>Resultado / observação</th></tr>${d.procedimentos.map(p=>`<tr><td>${esc(p.nome)}</td><td>${STP[p.status||'pendente']}</td><td>${p.data?fmtData(p.data):'—'}</td><td>${val(p.resultado)}</td></tr>`).join('')}</table>`:'<p class="nd">Nenhum procedimento registrado.</p>'}
+ <h2>8. Instrumentos e equipamentos utilizados</h2>${(d.instrumentos||[]).length?`<table><tr><th>Instrumento</th><th>Fabricante / modelo</th><th>Série / patrimônio</th><th>Calibração</th></tr>${d.instrumentos.map(i=>`<tr><td>${esc(i.nome)}</td><td>${esc([i.fabricante,i.modelo].filter(Boolean).join(' / '))||'—'}</td><td>${esc(i.serie||'—')}</td><td>${esc([i.cert,i.validade?'val. '+fmtData(i.validade):''].filter(Boolean).join(' • '))||'Não informada'}</td></tr>`).join('')}</table>`:'<p class="nd">Nenhum instrumento registrado.</p>'}
+ <h2>9. Resultados e medições</h2>${(d.medicoes||[]).length?`<table><tr><th>Parâmetro</th><th>Referência (fonte)</th><th>Resultado</th><th>Avaliação</th></tr>${d.medicoes.map(m=>`<tr><td>${esc(m.parametro)}${m.obs?`<br><small>${esc(m.obs)}</small>`:''}</td><td>${esc(m.referencia||'—')}${m.fonte?`<br><small>${esc(m.fonte)}</small>`:''}</td><td>${esc([m.resultado,m.unidade].filter(Boolean).join(' '))}</td><td>${esc((AVAL.find(a=>a[0]===m.avaliacao)||[,'—'])[1])}</td></tr>`).join('')}</table><div class="note">Os critérios de aceitação são os informados na coluna de referência, conforme a fonte indicada. Uma medição isolada não comprova, por si só, o funcionamento correto do equipamento.</div>`:'<p class="nd">Nenhuma medição registrada.</p>'}${figs(d.fotosEvid,nE)}
+ <h2>10. Diagnóstico e análise técnica</h2><b>Constatações</b>${lista(d.constatacoes)}<b>Hipóteses diagnósticas (não comprovadas)</b>${lista(d.hipoteses)}${kv([['Defeito identificado',dg.defeito],['Causa provável',dg.causa],['Componentes comprometidos',dg.componentes],['Condições de funcionamento',dg.funcionamento],['Riscos identificados',dg.riscos],['Consequências de manter em operação',dg.consequencias],['Necessidade de reparo ou substituição',dg.necessidade]])}<div class="note">Hipóteses são possibilidades a investigar e não representam componentes comprovadamente defeituosos.</div>
+ <h2>11. Conclusão e recomendações</h2><div class="box"><b>Classificação técnica:</b> ${esc(classeTxt(cn.classe)||'—')}<br><b>Justificativa:</b> ${val(cn.justificativa)}</div><b>Recomendações</b>${lista(cn.recomendacoes)}${cn.prazo?`<p><b>Prazo recomendado:</b> ${esc(cn.prazo)}</p>`:''}
+ <h2>12. Responsabilidade técnica</h2>${kv([['Profissional responsável',P.nome],['Título profissional',P.titulo],['Conselho / registro',[P.conselho,P.registro,P.uf].filter(Boolean).join(' • ')],['TRT / ART',r.tipoReg==='nenhum'?'Não aplicável a esta atividade':[r.tipoReg,r.numReg].filter(Boolean).join(' nº ')],['Local e data de emissão',(r.local||'')+' — '+dataEm],['Código do laudo',cod]])}<b>Referências técnicas</b>${refs.length?`<ul>${refs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="nd">Nenhuma referência informada.</p>'}<div class="note">Edição vigente e aplicabilidade das referências conferidas pelo profissional responsável. Este documento foi elaborado com apoio de ferramenta de documentação; a inspeção, os dados e a interpretação técnica são de responsabilidade do profissional habilitado.</div>${sig}
+ <h2>13. Anexos e evidências</h2>${nE+(d.fotosEvid||[]).length?`<table><tr><th>Anexo</th><th>Descrição</th></tr>${[...(d.fotosEquip||[]),...(d.fotosEvid||[])].map((f,i)=>`<tr><td>Figura ${i+1}</td><td>${esc(f.legenda||'sem legenda')}</td></tr>`).join('')}</table>`:'<p class="nd">Nenhum anexo.</p>'}<div class="note">Este documento não constitui instrução para intervenção em equipamento energizado. Intervenções internas exigem profissional capacitado e procedimentos seguros.</div>
+ <p style="text-align:center;font-size:9pt;color:#666;margin-top:14px">— Fim do documento ${esc(cod)}${def?' · Emitido em '+esc(fmtDH(l.emitidoEm))+' · SHA-256 '+esc(l.hash||''):''} —</p></div>`}
+function previa(l){modal('Documento '+l.numero,`<div style="overflow:auto">${docHTML(l)}</div>`,{largo:true,acoes:[{t:'Fechar'},{t:'Imprimir / Salvar PDF',cls:'pri',keep:true,fn:()=>{imprimir(l);return false}}]})}
+function imprimir(l){$('#print-root').innerHTML=docHTML(l);const t=document.title;document.title=l.numero+(l.versao>1?'_v'+l.versao:'')+((l.status==='definitivo'||l.status==='arquivado')?'':'_RASCUNHO');window.addEventListener('afterprint',()=>{document.title=t;$('#print-root').innerHTML=''},{once:true});setTimeout(()=>window.print(),150)}
+
+/* ===== prompt para IA (apoio à redação) ===== */
+function promptIA(l){
+ const d=l.dados,q=d.equip||{},cat=catPor(d.categoriaId),P=S.profissionais.find(p=>p.id===d.profissionalId)||{};
+ const L1=(t,v)=>v?`- ${t}: ${String(v).replace(/\n/g,' / ')}`:null;
+ const dados=[`EQUIPAMENTO`,L1('Categoria',cat?.nome),L1('Equipamento',q.equipamento),L1('Fabricante',q.fabricante),L1('Modelo',q.modelo),L1('Série',q.serie),L1('Tensão',q.tensao),L1('Frequência',q.frequencia),L1('Potência',q.potencia),
+ `FINALIDADE`,L1('Finalidade',d.finalidadeSel==='__outra'?d.finalidadeTxt:[d.finalidadeSel,d.finalidadeTxt].filter(Boolean).join(' — ')),
+ `RELATO DO CONTRATANTE (não é constatação)`,L1('Relato',d.relato?.texto),L1('Sintomas',d.relato?.sintomas),
+ `PROCEDIMENTOS`,...(d.procedimentos||[]).map(p=>`- ${p.nome} → ${STP[p.status||'pendente']}${p.resultado?' — '+p.resultado:''}`),
+ `INSTRUMENTOS`,...(d.instrumentos||[]).map(i=>`- ${[i.nome,i.fabricante,i.modelo,i.serie].filter(Boolean).join(' ')}`),
+ `MEDIÇÕES`,...(d.medicoes||[]).map(m=>`- ${m.parametro}: ${[m.resultado,m.unidade].filter(Boolean).join(' ')} | referência: ${m.referencia||'não informada'} (${m.fonte||'sem fonte'}) | avaliação: ${(AVAL.find(a=>a[0]===m.avaliacao)||[,'não avaliada'])[1]}`),
+ `CONSTATAÇÕES REGISTRADAS`,...linhas(d.constatacoes).map(x=>'- '+x),`HIPÓTESES REGISTRADAS`,...linhas(d.hipoteses).map(x=>'- '+x)].filter(Boolean).join('\n');
+ return `Você é um assistente de documentação técnica para laudos de equipamentos eletroeletrônicos. Auxilie o profissional habilitado (${P.nome||'responsável técnico'}) na redação, sem substituir o julgamento técnico dele.
+
+REGRAS PERMANENTES
+1. Nunca invente medições, resultados ou informações do equipamento.
+2. Nunca afirme que um teste foi realizado se não houver registro.
+3. Nunca invente normas, artigos, resoluções ou referências técnicas.
+4. Aponte informações ausentes ou contraditórias.
+5. Diferencie relato do contratante, constatação, hipótese e recomendação.
+6. Não emita diagnóstico conclusivo baseado apenas em suposições.
+7. Não ultrapasse as atribuições do profissional responsável.
+8. Apresente inconsistências antes de qualquer conclusão.
+9. Use linguagem técnica, impessoal e objetiva, em português do Brasil.
+10. Não conclua aprovação ou reprovação sem critérios técnicos definidos (fabricante, norma ou critério justificado).
+
+TAREFA
+Com base SOMENTE nos dados abaixo: (a) liste inconsistências e dados ausentes; (b) redija a seção "Diagnóstico e análise técnica" separando constatações de hipóteses; (c) sugira redação para "Conclusão e recomendações" sem inventar fatos. Ao final, lembre que a decisão é do profissional.
+
+DADOS DO LAUDO ${l.numero}
+${dados}`}
+
+/* ===== sincronização, sobre, ajustes ===== */
+function contarSync(){let t=0,p=0;COLS.forEach(c=>S[c].forEach(o=>{t++;if(o.sync!==true)p++}));return{t,p}}
+async function vSync(){
+ const{t,p}=contarSync();const pers=await(navigator.storage?.persisted?.()||Promise.resolve(false));
+ main(`<div class="card"><div class="row"><h2 style="margin:0">Sincronização e backup</h2><span class="badge ${navigator.onLine?'ok':'off'}">${navigator.onLine?'Online':'Offline'}</span></div>
+ <p>Os dados ficam salvos <b>neste aparelho</b> (funciona sem internet). Registros: <b>${t}</b> • Aguardando envio à nuvem: <b>${p}</b> • Armazenamento protegido contra limpeza: <b>${pers?'sim':'não garantido'}</b></p>
+ <div class="alert warn">A nuvem Fênix (Firebase via fenix-core.js) ainda não está conectada nesta versão 1.0. Até lá, faça backup periódico: o arquivo inclui laudos, fotos e cadastros.</div>
+ <div class="acts"><button class="btn pri" data-act="backup">Exportar backup (.json)</button><label class="btn">Importar backup<input type="file" accept="application/json,.json" id="impf" hidden></label><button class="btn" data-act="nuvem">Sincronizar agora</button></div></div>`,'Sincronização','#/');
+ $('#impf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(j.app!=='fenix-laudos'||!j.dados)throw 0;if(!await confirmar('Importar este backup? Registros mais novos do arquivo substituem os do aparelho; nada é apagado.',{ok:'Importar',perigo:false}))return;let n=0;COLS.forEach(c=>(j.dados[c]||[]).forEach(o=>{const a=S[c].find(x=>x.id===o.id);if(!a||(o.atualizadoEm||'')>(a.atualizadoEm||'')){const i=S[c].findIndex(x=>x.id===o.id);o.sync=false;if(i>=0)S[c][i]=o;else S[c].push(o);if(idbOk)tx(c,'readwrite').put(o);n++}}));toast(n+' registro(s) importado(s)');vSync()}catch(x){toast('Arquivo de backup inválido')}}}
+function backup(){const j={app:'fenix-laudos',versao:VERSAO,exportadoEm:agora(),dados:S};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(j)],{type:'application/json'}));a.download='Fenix_Laudos_Backup_'+hoje()+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('Backup gerado')}
+const CHANGELOG=[['1.0','25/11/2026',['Primeira versão do Fênix | Laudos Técnicos.','Cadastros permanentes: empresa (com busca de CNPJ), profissionais (atribuições por categoria e assinatura), contratantes e equipamentos.','Editor de laudo em 9 etapas: identificação, equipamento, histórico, procedimentos e instrumentos, medições, diagnóstico, conclusão, responsabilidade e revisão.','Biblioteca de 9 modelos técnicos (motores, quadros, eletrônicos, eletrodomésticos, geradores, transformadores, segurança eletrônica, carregadores de veículos elétricos e outros) e modelos personalizados.','Fluxo documental: rascunho → revisão técnica → definitivo → arquivado, com pendências automáticas e verificação de coerência.','Emissão definitiva com versão congelada, data/hora, código de integridade SHA-256 e correção por nova versão.','Documento A4 com cabeçalho institucional, fotos legendadas, marca d’água de rascunho e numeração de páginas (Imprimir / Salvar PDF).','Equipamento já cadastrado preenche automaticamente novos laudos; histórico por número de série.','Prompt para IA com regras permanentes (apoio à redação).','Funciona sem internet; backup e restauração em arquivo.']]];
+function sobre(){modal('Sobre',`<h3>${APP} <span class="badge info">v${VERSAO}</span></h3><p class="mut">Gerador de laudos técnicos para equipamentos eletroeletrônicos. Ferramenta auxiliar de documentação: a responsabilidade técnica é do profissional habilitado.</p><h3 style="margin-top:14px">Changelog</h3>${CHANGELOG.map(([v,dt,it])=>`<p><b>v${v}</b> — ${dt}</p><ul>${it.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`).join('')}<p><a href="https://fenicris-dev.github.io/Fenix-Core/Termos/fenix-termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a> • <a href="https://fenicris-dev.github.io/Fenix-Core/Termos/fenix-politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a></p><small>Fênix Soluções Tecnológicas</small>`,{acoes:[{t:'Fechar'}]})}
+function ajustes(){modal('Ajustes',`<div class="acts" style="flex-direction:column;align-items:stretch"><button class="btn" data-act="sobreAj">Sobre e changelog</button><button class="btn" data-act="irSync">Sincronização e backup</button><button class="btn danger" data-act="apagarTudo">Apagar todos os dados…</button></div>`,{acoes:[{t:'Fechar'}]})}
+
+/* ===== ações ===== */
+const ACT={
+ sobre,ajustes,sobreAj:()=>sobre(),irSync:()=>{$$('.ov').forEach(o=>o.remove());go('#/sync')},
+ apagarTudo:async()=>{if(await confirmarApagar()){await limparTudo();$$('.ov').forEach(o=>o.remove());L=null;toast('Todos os dados foram apagados');go('#/');rota()}},
+ backup,nuvem:()=>toast(navigator.onLine?'Nuvem Fênix ainda não conectada nesta versão (v1.0). Use o backup em arquivo.':'Sem internet. Os dados continuam salvos no aparelho.'),
+ filtro:d=>{FL.st=d.s;FL.q='';go('#/laudos')},chipSt:d=>{FL.st=d.s;vLaudos()},
+ newEnt:d=>editarEnt(d.c,null),editEnt:d=>editarEnt(d.c,d.id),editEmp:()=>editarEmpresa(),
+ delEnt:async d=>{const C=CFG[d.c],o=S[d.c].find(x=>x.id===d.id);let ex='';if(d.c==='profissionais'||d.c==='clientes'){const k=d.c==='profissionais'?'profissionalId':'clienteId';const n=ultimas().filter(l=>l.dados[k]===d.id).length;if(n)ex=` Ele(a) é usado(a) em ${n} laudo(s); os já emitidos permanecem preservados.`}if(await confirmar(`Tem certeza que quer excluir "${C.lab(o)}"?${ex}`)){remover(d.c,d.id);toast('Excluído');rota()}},
+ verModelo:d=>{const c=catPor(d.id);const ul=a=>`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')||'<li>—</li>'}</ul>`;modal(c.nome,`<p>${esc(c.desc)}</p><h3>Campos de identificação extras</h3>${ul(c.campos.map(x=>x[1]))}<h3>Procedimentos</h3>${ul(c.proc)}<h3>Medições sugeridas</h3>${ul(c.med.map(m=>m[0]+(m[1]?' ('+m[1]+')':'')))}<div class="alert info">Nenhum limite de aceitação é pré-definido: ele vem do fabricante, da norma ou de critério técnico justificado.</div>`,{acoes:[{t:'Fechar'}]})},
+ dupModelo:d=>{const c=catPor(d.id);editarEnt('modelos',null,{nome:c.nome+' (personalizado)',desc:c.desc,camposTxt:c.campos.map(x=>x[1]).join('\n'),procTxt:c.proc.join('\n'),medTxt:c.med.map(m=>m.join(' | ')).join('\n')})},
+ abrir:d=>go('#/laudo/'+d.id+'/0'),pdf:d=>previa(S.laudos.find(x=>x.id===d.id)),previa:()=>{gravar();previa(L)},
+ dup:d=>{const n=duplicar(S.laudos.find(x=>x.id===d.id));toast('Duplicado como rascunho (resultados e conclusão não são copiados)');go('#/laudo/'+n.id+'/0')},
+ novaVer:async d=>{const l=S.laudos.find(x=>x.id===d.id);if(await confirmar(`Criar a versão ${l.versao+1} de ${l.numero} para correção? A versão emitida será preservada.`,{ok:'Criar nova versão',perigo:false})){const n=novaVersao(l);go('#/laudo/'+n.id+'/0')}},
+ arquivar:d=>{const l=S.laudos.find(x=>x.id===d.id);l.status='arquivado';salvar('laudos',l);listaLaudos()},desarquivar:d=>{const l=S.laudos.find(x=>x.id===d.id);l.status='definitivo';salvar('laudos',l);listaLaudos()},
+ vers:d=>{const l=S.laudos.find(x=>x.id===d.id);const vs=S.laudos.filter(x=>x.grupoId===l.grupoId).sort((a,b)=>b.versao-a.versao);modal('Versões de '+l.numero,vs.map(v=>`<div class="card item"><div><div class="t">Versão ${v.versao} ${badge(v.status)}</div><small>${v.emitidoEm?'Emitida em '+fmtDH(v.emitidoEm):'Em elaboração'}</small></div><div class="acts" style="margin:0"><button class="btn sm" data-act="abrir" data-id="${v.id}">Abrir</button><button class="btn sm" data-act="pdf" data-id="${v.id}">Documento</button></div></div>`).join(''),{acoes:[{t:'Fechar'}]})},
+ delLaudo:async d=>{const l=S.laudos.find(x=>x.id===d.id);if(await confirmar(`Tem certeza que quer excluir o laudo ${l.numero}${l.versao>1?' (v'+l.versao+')':''}?`)){remover('laudos',l.id);toast('Laudo excluído');listaLaudos()}},
+ irStep:d=>{const s=Math.max(0,Math.min(8,+d.s));gravar();vEditor(L.id,s);history.replaceState(null,'','#/laudo/'+L.id+'/'+s)},
+ delRow:async d=>{if(await confirmar('Tem certeza que quer excluir este item?')){L.dados[d.l].splice(+d.i,1);agendar();recarregaStep()}},
+ delFoto:async d=>{if(await confirmar('Tem certeza que quer remover esta foto?',{ok:'Remover'})){L.dados[d.k].splice(+d.i,1);agendar();recarregaStep()}},
+ addProc:()=>{L.dados.procedimentos.push({nome:'',status:'pendente',resultado:'',data:''});agendar();recarregaStep()},loadProc:()=>carregarProc(true),
+ addInst:()=>{L.dados.instrumentos.push({nome:''});agendar();recarregaStep()},
+ addMed:()=>{L.dados.medicoes.push({parametro:'',unidade:'',referencia:'',fonte:'',resultado:'',avaliacao:'',obs:''});agendar();recarregaStep()},
+ sugMed:()=>{const c=catPor(L.dados.categoriaId);if(!c)return toast('Escolha a categoria na etapa 1');const ex=new Set(L.dados.medicoes.map(m=>m.parametro));let n=0;c.med.forEach(([p,u])=>{if(!ex.has(p)){L.dados.medicoes.push({parametro:p,unidade:u,referencia:'',fonte:'',resultado:'',avaliacao:'',obs:''});n++}});if(n){agendar();recarregaStep()}else toast('Parâmetros sugeridos já inseridos')},
+ novoProf:()=>editarEnt('profissionais',null,null,r=>{L.dados.profissionalId=r.id;agendar();recarregaStep()}),novoCli:()=>editarEnt('clientes',null,null,r=>{L.dados.clienteId=r.id;agendar();recarregaStep()}),
+ paraRevisao:()=>{sujo=true;gravar();L.status='revisao';salvar('laudos',L);toast('Laudo enviado para revisão técnica');vEditor(L.id,8)},
+ voltaRasc:()=>{L.status='rascunho';salvar('laudos',L);vEditor(L.id,8)},
+ promptIA:()=>{const t=promptIA(L);const m=modal('Prompt para IA',`<p class="mut">Copie e cole em um assistente de IA. Revise tudo o que ele devolver: a interpretação técnica é sua.</p><pre class="pm">${esc(t)}</pre>`,{largo:true,acoes:[{t:'Fechar'},{t:'Copiar',cls:'pri',keep:true,fn:async()=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast('Prompt copiado');return false}}]})},
+ emitir:()=>{gravar();const p=revisar(L),b=p.filter(x=>x.n==='bloq');
+  modal('Emitir versão definitiva',b.length?`<div class="alert bad">Há ${b.length} pendência(s) bloqueante(s). Corrija-as antes de emitir.</div>${b.map(x=>`<div class="pend">⛔ ${esc(x.m)}</div>`).join('')}`:`<p>Ao emitir, o conteúdo é <b>congelado</b> (versão ${L.versao}) com data, hora e código de integridade. Alterações posteriores exigem nova versão.</p><label class="chk"><input type="checkbox" id="decl"> Revisei o documento e assumo a responsabilidade técnica pelo seu conteúdo.</label>`,{acoes:b.length?[{t:'Fechar'}]:[{t:'Cancelar'},{t:'Emitir definitivo',cls:'pri',fn:async()=>{if(!$('#decl').checked){toast('Marque a declaração de responsabilidade');return false}
+   L.snap=snapVivo(L);L.status='definitivo';L.emitidoEm=agora();L.hash=await sha256(JSON.stringify({n:L.numero,v:L.versao,d:L.dados,s:L.snap,e:L.emitidoEm}));upsertCatalogo();upsertInstrumentos();salvar('laudos',L);toast('Laudo emitido');vEditor(L.id,8)}}]})}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset)}});
+document.addEventListener('input',e=>{const t=e.target;if(!L||LOCK||!t.dataset.p||t.type==='checkbox')return;setP(L.dados,t.dataset.p,t.value);agendar()});
+function hooks(p){
+ if(p==='equip.fabricante'||p==='equip.modelo')aplicarCatalogo();
+ if(p==='equip.serie'){const h=$('#histSerie');if(h)h.innerHTML=histSerie()}
+ const m=p.match(/^instrumentos\.(\d+)\.nome$/);if(m){const it=S.instrumentos.find(x=>x.nome===getP(L.dados,p)),r=L.dados.instrumentos[m[1]];if(it&&r&&!r.serie&&!r.fabricante){Object.assign(r,{fabricante:it.fabricante,modelo:it.modelo,serie:it.serie,cert:it.cert,validade:it.validade});agendar();recarregaStep()}}
+ if(p==='categoriaId'&&L.dados.procedimentos.every(x=>(x.status||'pendente')==='pendente'&&!x.resultado)){L.dados.procedimentos=[];L.dados.procAuto=0;agendar()}}
+document.addEventListener('change',async e=>{const t=e.target;if(!L)return;
+ if(t.dataset.foto&&!LOCK){for(const f of t.files){try{(L.dados[t.dataset.foto]=L.dados[t.dataset.foto]||[]).push({id:uid(),legenda:'',src:await lerImagem(f)})}catch(x){toast('Imagem inválida')}}agendar();recarregaStep();return}
+ if(t.dataset.ref&&!LOCK){const r=L.dados.resp.refs=L.dados.resp.refs||[],i=r.indexOf(t.dataset.ref);if(t.checked){if(i<0)r.push(t.dataset.ref)}else if(i>=0)r.splice(i,1);agendar();return}
+ if(t.dataset.p&&!LOCK)hooks(t.dataset.p)});
+
+/* ===== rotas e inicialização ===== */
+function rota(){
+ const h=location.hash.replace(/^#\/?/,'').split('/'),v=h[0]||'home';
+ if(v!=='laudo'&&L){gravar();L=null}
+ if(v==='novo'){const l=criarLaudo(dadosVazios());return location.replace('#/laudo/'+l.id+'/0')}
+ ({home:vHome,laudos:vLaudos,empresa:vEmpresa,profissionais:()=>vLista('profissionais'),clientes:()=>vLista('clientes'),catalogo:()=>vLista('catalogo'),modelos:vModelos,sync:vSync,laudo:()=>vEditor(h[1],h[2])}[v]||vHome)()}
+function netBadge(){const n=$('#net');n.textContent=navigator.onLine?'Online':'Offline';n.className='badge '+(navigator.onLine?'ok':'off')}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)gravar()});
+addEventListener('pagehide',gravar);addEventListener('online',netBadge);addEventListener('offline',netBadge);addEventListener('hashchange',rota);
+(async()=>{await abrirDB();await carregar();try{navigator.storage?.persist?.()}catch(e){}
+ if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+ netBadge();if(!idbOk)toast('Armazenamento local indisponível: os dados valem só nesta sessão');rota()})();
+
+</script>
+</body></html>
