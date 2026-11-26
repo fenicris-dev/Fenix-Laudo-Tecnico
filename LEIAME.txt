@@ -1,4 +1,4 @@
-FÊNIX | LAUDOS TÉCNICOS — v1.4 (26/11/2026)
+FÊNIX | LAUDOS TÉCNICOS — v1.5 (26/11/2026)
 ============================================
 PWA para gerar laudos técnicos de equipamentos eletroeletrônicos (padrão TRT/ART), com uso offline.
 Segue o Livro das Regras Fênix v6.1 (ficha A, B, C, D, E, F, G e I).
