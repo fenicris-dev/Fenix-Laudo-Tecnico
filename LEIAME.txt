@@ -1,0 +1,33 @@
+FÊNIX | LAUDOS TÉCNICOS — v1.3 (26/11/2026)
+============================================
+PWA para gerar laudos técnicos de equipamentos eletroeletrônicos (padrão TRT/ART), com uso offline.
+Segue o Livro das Regras Fênix v6.1 (ficha A, B, C, D, E, F, G e I).
+
+ESTRUTURA
+  index.html     aplicativo completo (jsPDF embutido; o Fênix Core vem do carregador oficial, com cache offline)
+  manifest.json  configuração de instalação (PWA)
+  sw.js          service worker (funcionamento offline)
+  LEIAME.txt     este arquivo
+  icone/         ícone oficial do app (64, 128, 192, 512 px e original)
+  manual/        manual do usuário (MD e PDF)
+  versoes/       cópia do app com a versão no nome
+
+PUBLICAÇÃO (GitHub Pages)
+  1. Crie o repositório (ex.: Fenix-Laudos-Tecnicos) e envie o conteúdo desta pasta.
+  2. Ative o GitHub Pages na branch principal.
+  3. Abra o endereço e use "Instalar app" / "Adicionar à tela inicial".
+  (O endereço usado no botão Compartilhar é https://fenicris-dev.github.io/Fenix-Laudos-Tecnicos/ — ajuste se for outro.)
+
+DADOS
+  Padrão: somente neste aparelho (IndexedDB, por usuário). Nuvem da Fênix: opcional, escolhida no primeiro acesso
+  ou em Ajuda > Onde guardar meus dados (sincronização pelo Fênix Core, escopo pessoal).
+  Dados da v1.0 neste aparelho são migrados automaticamente na primeira abertura.
+
+REQUISITOS
+  Na primeira abertura é preciso internet (carregar o Fênix Core e entrar). Depois funciona offline.
+
+PENDENTE (próximas etapas)
+  - QR Code de autenticidade, checklist de segurança, compartilhar PDF, login Google (H) e tema escuro (J).
+
+RESPONSABILIDADE
+  Ferramenta auxiliar de documentação. Inspeção, dados, interpretação e emissão são do profissional habilitado.

@@ -1,6 +1,6 @@
-/* Fênix | Laudos Técnicos — service worker v1.0 (offline-first) */
-const CACHE='fenix-laudos-v1.0';
-const ARQ=['./','./index.html','./manifest.json','./icone/Fenix_Laudos_Icone_192.png','./icone/Fenix_Laudos_Icone_512.png'];
+/* Fênix | Laudos Técnicos — service worker v1.3 (offline-first) */
+const CACHE='fenix-laudos-v1.3';
+const ARQ=['./','./index.html','./manifest.json','./icone/Fenix_Icone_192.png','./icone/Fenix_Icone_512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ARQ)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
