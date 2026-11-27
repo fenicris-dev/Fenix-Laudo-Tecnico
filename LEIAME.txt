@@ -1,4 +1,4 @@
-FÊNIX | LAUDOS TÉCNICOS — v1.5 (26/11/2026)
+FÊNIX | LAUDOS TÉCNICOS — v1.7 (27/11/2026)
 ============================================
 PWA para gerar laudos técnicos de equipamentos eletroeletrônicos (padrão TRT/ART), com uso offline.
 Segue o Livro das Regras Fênix v6.1 (ficha A, B, C, D, E, F, G e I).
@@ -11,6 +11,8 @@ ESTRUTURA
   icone/         ícone oficial do app (64, 128, 192, 512 px e original)
   manual/        manual do usuário (MD e PDF)
   versoes/       cópia do app com a versão no nome
+  verificar/     página pública de verificação do QR Code (publicar junto do app)
+  regras/        firestore.rules com o bloco novo verificacoes_laudos (publicar no console ANTES de usar o QR)
 
 PUBLICAÇÃO (GitHub Pages)
   1. Crie o repositório (ex.: Fenix-Laudos-Tecnicos) e envie o conteúdo desta pasta.
@@ -22,6 +24,12 @@ DADOS
   Padrão: somente neste aparelho (IndexedDB, por usuário). Nuvem da Fênix: opcional, escolhida no primeiro acesso
   ou em Ajuda > Onde guardar meus dados (sincronização pelo Fênix Core, escopo pessoal).
   Dados da v1.0 neste aparelho são migrados automaticamente na primeira abertura.
+
+QR CODE DE AUTENTICIDADE (v1.6)
+  Passos para ligar: (1) publique o app e a pasta verificar/ no GitHub Pages; (2) rode o Playground do Firestore
+  com regras/firestore.rules (bloco verificacoes_laudos) e publique no console; (3) emita um laudo e escaneie o QR.
+  Sem a regra publicada, o app tenta e falha em silêncio; o laudo sai com o QR, mas a página dirá "código não encontrado".
+  Endereço usado: https://fenicris-dev.github.io/Fenix-Laudos-Tecnicos/verificar/ (ajuste URL_APP se o repositório for outro).
 
 REQUISITOS
   Na primeira abertura é preciso internet (carregar o Fênix Core e entrar). Depois funciona offline.
